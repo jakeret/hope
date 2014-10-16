@@ -1,0 +1,18 @@
+# Config file for automatic testing at travis-ci.org
+language: python
+python:
+- "3.3"
+- "2.7"
+# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
+# Note: we only use coveralls with Travis, not tox. pip install coveralls doesn't work on Windows.
+# This setup makes it possible for:
+# 1. the tests to be run with tox on Windows
+# 2. Windows users to use the requirements files without running into installation problems.
+install:
+- pip install coveralls
+- pip install -r requirementstxt
+
+# command to run tests, e.g. python setup.py test
+script: coverage run --source hope setup.py test
+after_success:
+	coveralls
