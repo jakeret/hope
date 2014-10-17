@@ -5,6 +5,9 @@ HOPE - combine the ease of Python and the speed of C++
 .. image:: https://badge.fury.io/py/hope.png
     :target: http://badge.fury.io/py/hope
 
+.. image:: https://travis-ci.org/cosmo-ethz/hope.png?branch=master
+        :target: https://travis-ci.org/cosmo-ethz/hope
+        
 .. image:: https://pypip.in/d/hope/badge.png
         :target: https://crate.io/packages/hope?version=latest
 
