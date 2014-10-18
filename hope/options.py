@@ -9,7 +9,8 @@ CXX_FLAGS = {
     "clang": ["-Wall", "-Wno-unused-variable", "-march=native", "-stdlib=libc++", "-std=c++11"],
     "icc": ["-Wall", "-Wno-unused-variable", "-march=native", "-stdlib=libc++", "-std=c++11"],
     "gcc-mac": ["-Wall", "-Wno-unused-variable", "-std=c++11", "-msse4.2"],
-    "gcc-linux": ["-Wall", "-Wno-unused-variable", "-std=c++11"]
+    "gcc-linux": ["-Wall", "-Wno-unused-variable", "-std=c++11"],
+    "x86_64-linux-gnu-gcc": ["-Wall", "-Wno-unused-variable", "-std=c++11"]
 }
 
 DARWIN_KEY = "Darwin"
