@@ -81,4 +81,3 @@ def _check_version(compiler_name, compiler_exec):
             raise UnsupportedCompilerException("Compiler '%s' with version '%s' is not supported. Minimum version is '%s'"%(compiler_name, 
                                                                                                                             version, 
                                                                                                                             SUPPORTED_VERSIONS[compiler_name]))
-        print(version)
