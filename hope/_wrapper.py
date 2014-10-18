@@ -251,7 +251,6 @@ def _compile(target, localfilename, fkt_name):
     
     #TODO: add test case
     if out.find("warning:") > -1:
-        import warnings
         warnings.warn("A warning has been issued during compilation:\n{0}".format(out))
 
     if config.verbose:
