@@ -10,7 +10,7 @@ python:
 # 2. Windows users to use the requirements files without running into installation problems.
 install:
 - pip install coveralls
-- pip install -r requirementstxt
+- pip install -r requirements.txt
 
 # command to run tests, e.g. python setup.py test
 script: coverage run --source hope setup.py test
