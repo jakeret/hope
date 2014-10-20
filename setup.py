@@ -26,9 +26,14 @@ readme = open("README.rst").read()
 history = open("HISTORY.rst").read().replace(".. :changelog:", "")
 # during runtime
 requires = ["numpy>=1.7", "sympy==0.7.5"]
-# for testing and development
-tests_require = ["pytest>=2.3", "mock==1.0.1", "tox==1.8.0 ", "flake8==2.2.4",
-                 "coverage==3.7.1", "Sphinx==1.2.3"]
+# for testing
+tests_require = ["pytest>=2.3", "mock==1.0.1", "tox==1.8.0",
+                 "coverage==3.7.1",]
+# for development and documentation
+extras_require = {
+    "docs": "Sphinx==1.2.3",
+    "lint": "flake8==2.2.4",
+}
 
 PACKAGE_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
 
@@ -44,6 +49,8 @@ setup(
     package_dir={"hope": "hope"},
     include_package_data=True,
     install_requires=requires,
+    tests_require=tests_require,
+    extra_requires=extras_require,
     license="GPLv3",
     zip_safe=False,
     keywords="HOPE, JIT compiler, HPC, high performance computing",
@@ -65,6 +72,5 @@ setup(
         "Topic :: Software Development :: Code Generators",
         "Topic :: Software Development :: Compilers",
     ],
-    tests_require=tests_require,
     cmdclass = { "test": PyTest },
 )
