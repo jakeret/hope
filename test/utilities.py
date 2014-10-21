@@ -15,7 +15,7 @@ min_dtypes = [np.int8, np.uint64, np.float64]
 # dtypes = [np.longlong, np.ulonglong, np.int8, np.int32, np.uint16, np.uint64, np.float32, np.float64, int, float]
 dtypes = [np.ulonglong, np.int8, np.int32, np.uint64, np.float32, int, float]
 #shapes = [[], [1200], [30, 13]]
-shapes = [[], [7], [3, 4]]
+shapes = [[], [3, 4]]
 
 try:
     os.environ["HUDSON_URL"]
