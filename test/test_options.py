@@ -42,7 +42,7 @@ class TestOptions(object):
             sys_mock.return_value = options.DARWIN_KEY
             with patch("distutils.ccompiler.new_compiler") as new_cc_mock:
                 with patch("subprocess.check_output") as command_mock:
-                    command_mock.return_value = options.MIN_GCC_VERSION
+                    command_mock.return_value = options.MIN_GCC_VERSION.encode('utf-8')
                     cc_mock = MagicMock()
                     cc_mock.compiler = [compiler_name]
                     new_cc_mock.return_value = cc_mock
@@ -62,7 +62,7 @@ class TestOptions(object):
             sys_mock.return_value = options.LINUX_KEY
             with patch("distutils.ccompiler.new_compiler") as new_cc_mock:
                 with patch("subprocess.check_output") as command_mock:
-                    command_mock.return_value = options.MIN_GCC_VERSION
+                    command_mock.return_value = options.MIN_GCC_VERSION.encode('utf-8')
                     cc_mock = MagicMock()
                     cc_mock.compiler = [compiler_name]
                     new_cc_mock.return_value = cc_mock
@@ -82,7 +82,7 @@ class TestOptions(object):
             sys_mock.return_value = options.LINUX_KEY
             with patch("distutils.ccompiler.new_compiler") as new_cc_mock:
                 with patch("subprocess.check_output") as command_mock:
-                    command_mock.return_value = "1.0.0"
+                    command_mock.return_value = "1.0.0".encode('utf-8')
                     cc_mock = MagicMock()
                     cc_mock.compiler = [compiler_name]
                     new_cc_mock.return_value = cc_mock
