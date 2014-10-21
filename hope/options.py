@@ -75,7 +75,7 @@ def _check_version(compiler_name, compiler_exec):
     if compiler_name in SUPPORTED_VERSIONS.keys():
         import subprocess
         from distutils.version import StrictVersion
-        version = subprocess.check_output(compiler_exec + ' -dumpversion', shell=True).decode().rstrip()
+        version = subprocess.check_output(compiler_exec + ' -dumpversion', shell=True).rstrip()
         if StrictVersion(version) < StrictVersion(SUPPORTED_VERSIONS[compiler_name]):
             raise UnsupportedCompilerException("Compiler '%s' with version '%s' is not supported. Minimum version is '%s'"%(compiler_name, 
                                                                                                                             version, 
