@@ -9,7 +9,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 import pytest
 from hope import _wrapper
 import hope
-from hope.jit import _check_state
+from hope.jit import _check_state, jit
 
 def dummy():
     pass
@@ -87,3 +87,20 @@ class TestJit(object):
         except LookupError as le:
             assert True
 
+    def test_fkt_with_args(self):
+        with pytest.raises(ValueError):
+            @jit
+            def func_with_star_args(a, *args):
+                pass
+        with pytest.raises(ValueError):
+            @jit
+            def func_with_kwargs(a, **kwargs):
+                pass
+        with pytest.raises(ValueError):
+            @jit
+            def func_with_star_args_and_kwargs(a, *args, **kwargs):
+                pass
+        # Should not raise ValueError
+        @jit
+        def func_with_vanilla_args(a, b):
+            pass
