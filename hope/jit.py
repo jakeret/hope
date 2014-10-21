@@ -28,7 +28,6 @@ from hope._wrapper import get_fkt_hash
 # TODO: check for PyArray_ISNOTSWAPPED
 # TODO: merge scalar blocks and search subexpressions in all lines
 # TODO: asserts of sizes
-# TODO: check if fkt has default arguments or named arguments and throw error
 # TODO: make class derived from tuple which can hold several parameters and be passed to hope functions
 # TODO: use int PyArrayObject.flags to check if data has to be copied http://docs.scipy.org/doc/numpy/reference/c-api.types-and-structures.html#PyArrayObject
 # TODO: use https://github.com/workhorsy/py-cpuinfo/blob/master/cpuinfo.py to detect features
@@ -70,6 +69,10 @@ def jit(fkt):
 
     if config.hopeless:
         return fkt
+
+    argspec = inspect.getargspec(fkt)
+    if argspec.varargs is not None or argspec.keywords is not None:
+        raise ValueError("Jitted functions should not have *args or **kwargs")
 
     hash = hashlib.sha224(inspect.getsource(fkt).encode('utf-8')).hexdigest()
     filename = "{0}_{1}".format(fkt.__name__, hash)
