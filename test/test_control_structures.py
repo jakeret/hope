@@ -86,7 +86,7 @@ def test_for_iteration_vars(dtype):
     hfkt = hope.jit(fkt)
     size_x = 10
     ao, ah = random(dtype, [size_x])
-    ao, ah = ao / 5., ah / 5.
+    ao, ah = ao / (2 * size_x + 1), ah / (2 * size_x + 1)
     bo, bh = np.zeros((size_x), dtype), np.zeros((size_x), dtype)
     fkt(ao, bo, size_x)
     hfkt(ah, bh, size_x)
