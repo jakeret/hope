@@ -20,6 +20,8 @@ from hope._transformer import ASTTransformer
 import hope._cache as cache
 from hope import config
 import warnings
+from setuptools.command.build_ext import build_ext
+from distutils.dist import Distribution
 
 
 class Wrapper:
@@ -96,13 +98,13 @@ class Wrapper:
             with open(os.path.join(tempfolder, "{0}.cpp".format(localfilename)), "w") as fp:
                 fp.write(code)
     
-            _compile(tempfolder, localfilename, self.fkt.__name__)
+            so_filename = _compile(tempfolder, localfilename, self.fkt.__name__)
     
             self._store_state(tempfolder, localfilename)
     
             #move xxx.so and pickled state if it doesn't already exists or if it was a recompilation due to inconsistent state
             if self._recompile or not os.path.isfile(os.path.join(config.prefix, "{0}.so".format(localfilename))):
-                shutil.move(os.path.join(tempfolder, "{0}.so".format(localfilename)), os.path.join(config.prefix, "{0}.so".format(localfilename)))
+                shutil.move(os.path.join(tempfolder, so_filename), os.path.join(config.prefix, "{0}.so".format(localfilename)))
                 shutil.move(os.path.join(tempfolder, "{0}.pck".format(self.filename)), os.path.join(config.prefix, "{0}.pck".format(self.filename)))
     
     
@@ -190,6 +192,8 @@ def _compile(target, localfilename, fkt_name):
     :param fkt_name: name of the function to be compiled
     
     :raises Exception: An exception is raised if the file could be to compiled
+    
+    :return so_filename: The name of the .so file
     """
     outfile, stdout, stderr, argv = None, None, None, sys.argv
     try:
@@ -245,7 +249,10 @@ def _compile(target, localfilename, fkt_name):
     with open(os.path.join(target, "{0}.out".format(localfilename))) as outfile:
         out = outfile.read()
 
-    if not os.path.isfile(os.path.join(target, "{0}.so".format(localfilename))) or out.find("error:") > -1:
+    # on Travis CI & Py33 name contains additional suffix to .so
+    so_filename = build_ext(Distribution()).get_ext_filename(localfilename)
+
+    if not os.path.isfile(os.path.join(target, so_filename)) or out.find("error:") > -1:
         print(out)
         raise Exception("Error compiling function {0} (compiled to {1})".format(fkt_name, target))
     
@@ -257,6 +264,8 @@ def _compile(target, localfilename, fkt_name):
 
     if config.verbose:
         print(out)
+        
+    return so_filename
 
 def get_config_attrs():
     """

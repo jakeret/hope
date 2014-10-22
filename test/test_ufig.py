@@ -89,7 +89,7 @@ def test_ufig_gal_intrinsic():
 def test_ufig_bincount():
 
     def bincount(buffer, x, y, size, size_x, size_y):
-        for idx in xrange(size):
+        for idx in range(size):
             if x[idx]>= 0 and x[idx] <= size_x and y[idx] >= 0 and y[idx] <= size_y:
                 buffer[x[idx], y[idx]] += 1.
     hope.config.optimize = True
