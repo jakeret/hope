@@ -47,3 +47,4 @@ htmlcov/
 
 # Local env
 .envs
+.hope
