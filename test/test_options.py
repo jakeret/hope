@@ -23,10 +23,11 @@ DARWIN_MAPPING = {"gcc": "gcc-mac",
                   "c++": "clang",
                   }
 
-LINUX_COMPILERS = ["gcc-linux", "gcc", "cc", "c++", "icc"]
+LINUX_COMPILERS = ["gcc-linux", "gcc", "cc", "c++", "icc", "x86_64-linux-gnu-gcc"]
 LINUX_MAPPING = {"gcc": "gcc-linux",
                   "cc": "gcc",
                   "c++": "gcc",
+                  "x86_64-linux-gnu-gcc": "gcc-linux"
                   }
 
 # custom marker enabling selective unit testing

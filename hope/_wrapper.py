@@ -4,7 +4,6 @@
 from __future__ import print_function, division, absolute_import
 
 
-from numpy.distutils.misc_util import get_numpy_include_dirs
 import os
 import io
 import sys
@@ -14,14 +13,18 @@ import pickle
 import inspect
 import tempfile
 import shutil
+import warnings
+
+from numpy.distutils.misc_util import get_numpy_include_dirs
+from setuptools.command.build_ext import build_ext
+from distutils.dist import Distribution
+import distutils.sysconfig
+
 
 from hope._ast import *
 from hope._transformer import ASTTransformer
-import hope._cache as cache
 from hope import config
-import warnings
-from setuptools.command.build_ext import build_ext
-from distutils.dist import Distribution
+import hope._cache as cache
 
 
 class Wrapper:
@@ -220,6 +223,13 @@ def _compile(target, localfilename, fkt_name):
                 localfilename = StringType(localfilename)
                 sources = StringType(sources)
 
+            # avoid warning on linux + gcc
+            cfg_vars = distutils.sysconfig.get_config_vars()
+            if "CFLAGS" in cfg_vars:
+                cfg_vars["CFLAGS"] = cfg_vars["CFLAGS"].replace("-Wstrict-prototypes", "")
+            if "OPT" in cfg_vars:
+                cfg_vars["OPT"] = cfg_vars["OPT"].replace("-Wstrict-prototypes", "")
+
             setuptools.setup( \
                   name = localfilename\
                 , ext_modules = [setuptools.Extension( \
@@ -258,9 +268,12 @@ def _compile(target, localfilename, fkt_name):
     
     #TODO: add test case
     if out.find("warning:") > -1:
-        #TODO: fix encoding error on *nix systems!
-        import warnings
-        warnings.warn("A warning has been issued during compilation:\n{0}".format(out).encode('utf-8'))
+        try: 
+            #trying to encode utf-8 to support AstroPy
+            warnings.warn("A warning has been issued during compilation:\n{0}".format(out).encode('utf-8'))
+        except UnicodeError:
+            #encoding fails on Linux
+            warnings.warn("A warning has been issued during compilation:\n{0}".format(out))
 
     if config.verbose:
         print(out)

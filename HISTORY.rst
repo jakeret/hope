@@ -3,6 +3,14 @@
 History
 -------
 
+0.X.X (XXXX-XX-XX)
+++++++++++++++++++
+
+* Better support for Py3*
+* Proper integration in Travis CI
+* Improved support for Linux systems (`accepting x86_64-linux-gnu-gcc`)
+* Avoiding warning on Linux by removing `Wstrict-prototypes` arg
+
 0.3.0 (2014-10-16)
 ++++++++++++++++++
 
