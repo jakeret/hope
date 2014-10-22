@@ -25,14 +25,14 @@ class PyTest(TestCommand):
 readme = open("README.rst").read()
 history = open("HISTORY.rst").read().replace(".. :changelog:", "")
 # during runtime
-requires = ["numpy>=1.7", "sympy==0.7.5"]
+requires = ["numpy>=1.7", "sympy>=0.7.5"]
 # for testing
-tests_require = ["pytest>=2.3", "mock==1.0.1", "tox==1.8.0",
-                 "coverage==3.7.1",]
+tests_require = ["pytest>=2.3", "mock>=1.0.1", "tox>=1.8.0",
+                 "coverage>=3.7.1", "pytest-cov>=1.8.0"]
 # for development and documentation
 extras_require = {
-    "docs": "Sphinx==1.2.3",
-    "lint": "flake8==2.2.4",
+    "docs": "Sphinx>=1.2.3",
+    "lint": "flake8>=2.2.4",
 }
 
 PACKAGE_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
