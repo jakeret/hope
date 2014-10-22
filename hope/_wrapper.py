@@ -258,9 +258,7 @@ def _compile(target, localfilename, fkt_name):
     
     #TODO: add test case
     if out.find("warning:") > -1:
-        #TODO: fix encoding error on *nix systems!
-        import warnings
-        warnings.warn("A warning has been issued during compilation:\n{0}".format(out).encode('utf-8'))
+        warnings.warn("A warning has been issued during compilation:\n{0}".format(out))
 
     if config.verbose:
         print(out)
