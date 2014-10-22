@@ -63,6 +63,10 @@ def get_cxxflags():
     compiler = new_compiler()
     customize_compiler(compiler)
     compiler_name = compiler.compiler[0].split("/")[-1]
+
+    if compiler_name not in CXX_FLAGS.keys(): # trying to support x86_64-linux-gnu-gcc
+        compiler_name = "gcc-linux" if compiler_name.find("gcc") > -1 else compiler_name
+
     
     _check_version(compiler_name, compiler.compiler[0])
     
