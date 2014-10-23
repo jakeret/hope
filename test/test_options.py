@@ -116,7 +116,27 @@ class TestOptions(object):
                     pytest.fail("Compiler is not supported")
                 except UnsupportedCompilerException:
                     assert True
-        
+
+    def test_get_cxxflags_gcc_clang(self):
+        compiler_name = "gcc"
+        with patch("platform.system") as sys_mock:
+            sys_mock.return_value = options.DARWIN_KEY
+            with patch("distutils.ccompiler.new_compiler") as new_cc_mock:
+                with patch("subprocess.check_output") as command_mock:
+                    command_mock.return_value = options.GCC_CLANG_VERSION.encode('utf-8')
+                    cc_mock = MagicMock()
+                    cc_mock.compiler = [compiler_name]
+                    new_cc_mock.return_value = cc_mock
+                    flags = get_cxxflags()
+                    assert flags is not None
+                    
+                    try:
+                        compiler = DARWIN_MAPPING[compiler_name]
+                    except KeyError:
+                        compiler = compiler_name
+                    
+                    assert map(eq, flags, options.CXX_FLAGS[compiler])
+
 if __name__ == '__main__':
     test = TestOptions()
     test.test_get_cxxflags_Darwin()
