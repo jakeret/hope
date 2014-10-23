@@ -10,6 +10,8 @@ History
 * Proper integration in Travis CI
 * Improved support for Linux systems (`accepting x86_64-linux-gnu-gcc`)
 * Avoiding warning on Linux by removing `Wstrict-prototypes` arg
+* Supporting gcc proxied clang
+* Added set of examples
 
 0.3.0 (2014-10-16)
 ++++++++++++++++++
