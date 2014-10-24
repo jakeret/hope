@@ -3,14 +3,14 @@
 History
 -------
 
-0.X.X (XXXX-XX-XX)
+0.3.1 (2014-10-24)
 ++++++++++++++++++
 
-* Better support for Py3*
+* Better support for Python 3.3 and 3.4
 * Proper integration in Travis CI
 * Improved support for Linux systems (`accepting x86_64-linux-gnu-gcc`)
 * Avoiding warning on Linux by removing `Wstrict-prototypes` arg
-* Supporting gcc proxied clang
+* Supporting gcc proxied clang (OS X)
 * Added set of examples
 
 0.3.0 (2014-10-16)

@@ -39,10 +39,10 @@ PACKAGE_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
 
 setup(
     name="hope",
-    version="0.3.0",
+    version="0.3.1",
     description="Specialized method-at-a-time JIT compiler",
     long_description=readme + "\n\n" + history,
-    author="Lukas Gamper",
+    author="Lukas Gamper, Joel Akeret",
     author_email="hope@phys.ethz.ch",
     url="http://hope.phys.ethz.ch",
     packages=find_packages(PACKAGE_PATH, "test"),
