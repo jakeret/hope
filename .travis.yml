@@ -10,6 +10,7 @@ before_install:
   - sudo ln -sf /usr/bin/g++-4.8 /usr/bin/g++
 
 python:
+- "3.4"
 - "3.3"
 - "2.7"
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors

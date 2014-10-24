@@ -137,10 +137,16 @@ class SourceGenerator(NodeVisitor):
                 self.visit(default)
         if node.vararg is not None:
             write_comma()
-            self.write('*' + node.vararg)
+            if hasattr(node.vararg, "arg"): # py34
+                self.write('*' + node.vararg.arg)
+            else:    
+                self.write('*' + node.vararg)
         if node.kwarg is not None:
             write_comma()
-            self.write('**' + node.kwarg)
+            if hasattr(node.kwarg, "arg"): # py34
+                self.write('**' + node.kwarg.arg)
+            else:
+                self.write('**' + node.kwarg)
 
     def decorators(self, node):
         for decorator in node.decorator_list:
@@ -444,6 +450,9 @@ class SourceGenerator(NodeVisitor):
 
     def visit_Name(self, node):
         self.write(node.id)
+
+    def visit_NameConstant(self, node):
+        self.write(str(node.value))
 
     def visit_Str(self, node):
         if node.s.find("\n") > -1 and len(node.s)>1:
