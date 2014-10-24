@@ -9,11 +9,16 @@ import numpy as np
 import hope, itertools, pytest, sys, sysconfig, os, shutil, copy
 hope.rangecheck = True
 
+# TODO: differentiate between TravisCI (50min limit) and local + different python versions
 # TODO: implement complex
 # min_dtypes = [np.int8, np.uint64, np.float32, np.float64]
 min_dtypes = [np.int8, np.uint64, np.float64]
 # dtypes = [np.longlong, np.ulonglong, np.int8, np.int32, np.uint16, np.uint64, np.float32, np.float64, int, float]
-dtypes = [np.ulonglong, np.int8, np.int32, np.uint64, np.float32, int, float]
+
+if sys.version_info[0] == 3: #PY3 seems to be slower on TravisCI
+    dtypes = [np.ulonglong, np.int8, np.uint64, np.float32, int, float]
+else:
+    dtypes = [np.ulonglong, np.int8, np.int32, np.uint64, np.float32, int, float]
 #shapes = [[], [1200], [30, 13]]
 shapes = [[], [3, 4]]
 

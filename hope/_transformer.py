@@ -346,6 +346,9 @@ class ASTTransformer(ast.NodeVisitor):
         
         return self.variables[node.id]
 
+    def visit_NameConstant(self, node): #new in Py34
+        return Number(node.value)
+
     def visit_Slice(self, node):
         if not node.step is None:
             raise Exception("Step size other than 1 are not supported")
