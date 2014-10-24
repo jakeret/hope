@@ -15,7 +15,7 @@ hope.rangecheck = True
 min_dtypes = [np.int8, np.uint64, np.float64]
 # dtypes = [np.longlong, np.ulonglong, np.int8, np.int32, np.uint16, np.uint64, np.float32, np.float64, int, float]
 
-if sys.version_info[0] == 3 and sys.version_info[1] == 4:
+if sys.version_info[0] == 3: #PY3 seems to be slower on TravisCI
     dtypes = [np.ulonglong, np.int8, np.uint64, np.float32, int, float]
 else:
     dtypes = [np.ulonglong, np.int8, np.int32, np.uint64, np.float32, int, float]
