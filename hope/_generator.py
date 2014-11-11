@@ -264,7 +264,7 @@ class CPPGenerator(NodeVisitor):
         if len(shape) == 0:
             return "{0} c{1} = {0}();".format(PY_C_TYPE[variable.dtype], variable.name)
         else:
-            return "npy_intp d{0}[] = {{(npy_intp){1}}};\n".format(variable.name, ", ".join(shape)) \
+            return "npy_intp d{0}[] = {{(npy_intp){1}}};\n".format(variable.name, ", (npy_intp)".join(shape)) \
                 +  "PyObject * p{0} = PyArray_EMPTY({1}, d{0}, {2}, 0);\n".format(variable.name, len(shape), NPY_TYPEENUM[variable.dtype]) \
                 +  "npy_intp * s{0} = PyArray_SHAPE((PyArrayObject *)p{0});\n".format(variable.name) \
                 +  "{0} * c{1} = ({0} *)PyArray_DATA((PyArrayObject *)p{1});".format(PY_C_TYPE[variable.dtype], variable.name)
