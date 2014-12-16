@@ -54,6 +54,10 @@ def test_func_cos(a, b, c): return np.cos(a)
 def test_func_tan(a, b, c): return np.tan(a)
 
 @pytest.mark.parametrize("dtype,shape", itertools.product([np.float32, np.float64, float], shapes))
+@make_test
+def test_func_sign(a, b, c): return np.sign(a)
+
+@pytest.mark.parametrize("dtype,shape", itertools.product([np.float32, np.float64, float], shapes))
 def test_func_arcsin(dtype, shape):
     def fkt(a): 
         return np.arcsin(a)

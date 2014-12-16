@@ -248,6 +248,9 @@ class CPPGenerator(NodeVisitor):
             if "right" in node.keywords:
                 ret = "{0} > {1} ? {2} : ({3})".format(self.visit(node.args[0]), right, self.visit(node.keywords["right"]), ret)
             return "({0})".format(ret)
+        elif isinstance(node.name, NumpyAttr) and node.name.name == "sign":
+            self.library["native_sign"] = LIBRARY_NATIVE_SIGN
+            return "native_sign({0})".format(self.visit(node.args[0]))
         elif isinstance(node.name, NumpyAttr) and node.name.name in NPY_UNARY_FUNCTIONS:
             return "{0}({1})".format(NPY_UNARY_FUNCTIONS[node.name.name], self.visit(node.args[0]))
         elif isinstance(node.name, NumpyAttr) and node.name.name in NPY_CAST_FUNCTIONS:

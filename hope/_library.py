@@ -294,6 +294,12 @@ template<typename T> inline typename std::enable_if<std::is_signed<T>::value, T>
 }
 """
 
+LIBRARY_NATIVE_SIGN = """
+template<typename T> inline T native_sign(T arg) {
+    return (T(0) < arg) - (arg < T(0));
+}
+"""
+
 LIBRARY_NATIVE_RANGECHECK = """
 #include <string>
 inline int native_rangecheck(int x, int u, int l, std::string idxname, std::string varname) {
