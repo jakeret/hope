@@ -296,7 +296,7 @@ template<typename T> inline typename std::enable_if<std::is_signed<T>::value, T>
 
 LIBRARY_NATIVE_SIGN = """
 template<typename T> inline T native_sign(T arg) {
-    return (T(0) < arg) - (arg < T(0));
+    return T(T(0) < arg) - T(arg < T(0));
 }
 """
 
