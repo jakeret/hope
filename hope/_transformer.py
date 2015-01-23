@@ -91,6 +91,10 @@ class AllocateVisitor(NodeVisitor):
         
     def generic_visit(self, node):
         pass
+    def visit_If(self, node):
+        self.visit(node.body)
+        if node.orelse is not None:
+            self.visit(node.orelse)
     def visit_For(self, node):
         scope = node.iter.scope
         node.iter.scope = "body"
