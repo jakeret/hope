@@ -220,7 +220,7 @@ def test_func_sum_in_if(dtype, shape):
     def fkt(a):
         if True:
             val = np.sum(a)
-        else
+        else:
             val = 1
         return val
     hfkt = hope.jit(fkt)
@@ -228,8 +228,6 @@ def test_func_sum_in_if(dtype, shape):
     ao, ah = ao / 1200, ah / 1200
     co, ch = fkt(ao), hfkt(ah)
     assert check(co, ch)
-    assert co.dtype == np.float64
-    assert ch.dtype == np.float64
 
 def test_create_empty_array():
     def fkt(shape):
