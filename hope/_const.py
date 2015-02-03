@@ -188,7 +188,7 @@ NPY_UNARY_FUNCTIONS["sqrt"] = "std::sqrt"
 NPY_UNARY_FUNCTIONS["abs"] = "abs"
 # NPY_UNARY_FUNCTIONS["absolute"] = "absolute"
 NPY_UNARY_FUNCTIONS["fabs"] = "std::fabs"
-# NPY_UNARY_FUNCTIONS["sign"] = "sign"
+NPY_UNARY_FUNCTIONS["sign"] = "sign"
 
 NPY_BINARY_FUNCTIONS = {}
 # NPY_BINARY_FUNCTIONS["hypot"] = "hypot"

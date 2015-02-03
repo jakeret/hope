@@ -306,7 +306,7 @@ class NumpyAttr(Token):
         self.__check(args, keywords)
         if self.name in ["empty", "zeros", "ones"]:
             return getattr(np, keywords["dtype"].name) if len(keywords) == 1 else np.float64
-        elif self.name in "interp" or self.name in NPY_UNARY_FUNCTIONS:
+        elif self.name in ["interp", "sign"] or self.name in NPY_UNARY_FUNCTIONS:
             return args[0].dtype
         elif self.name in NPY_CAST_FUNCTIONS:
             return NPY_CAST_FUNCTIONS[self.name]
@@ -315,7 +315,7 @@ class NumpyAttr(Token):
         self.__check(args, keywords)
         if self.name in ["empty", "zeros", "ones"]:
             return [(None, arg) for arg in args[0]] if isinstance(args[0], list) else [(None, args[0])]
-        elif self.name == "interp" or self.name in NPY_UNARY_FUNCTIONS or self.name in NPY_CAST_FUNCTIONS:
+        elif self.name in ["interp", "sign"] or self.name in NPY_UNARY_FUNCTIONS or self.name in NPY_CAST_FUNCTIONS:
             return args[0].shape
 
 
