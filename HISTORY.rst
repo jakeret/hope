@@ -3,11 +3,12 @@
 History
 -------
 
-0.3.2 (2015-xx-xx)
+0.4.0 (2015-xx-xx)
 ++++++++++++++++++
 
 * Support for variable allocation within if-else
-
+* Added support for numpy.sign
+* Improve compilation speed for large functions
 
 0.3.1 (2014-10-24)
 ++++++++++++++++++
