@@ -106,14 +106,28 @@ class AllocateVisitor(NodeVisitor):
         return [self.visit(block) for block in node.body]
     def visit_Body(self, node):
         symbolcollector = SymbolNamesCollector()
-        for ind, block in enumerate(node.blocks):
-            for other in node.blocks[:ind] + node.blocks[(ind + 1):]:
-                for symbol in set(symbolcollector.visit(block)).intersection(set(symbolcollector.visit(other))):
-                    if self.variables[symbol].scope == "block":
-                        self.variables[symbol].scope = "body"
-                        self.variables[symbol].allocated = True
-                        node.blocks = node.blocks[:ind] + [Block(Allocate(self.variables[symbol]))] + node.blocks[ind:]
-                        return self.visit_Body(node)
+        symboldict = {block: set(symbolcollector.visit(block)) for block in node.blocks}
+
+        def check_blocks(start):
+            for ind, block in enumerate(node.blocks):
+                if start < ind:
+                    for other in node.blocks[:ind] + node.blocks[(ind + 1):]:
+                        for symbol in symboldict[block].intersection(symboldict[other]):
+                            if self.variables[symbol].scope == "block":
+                                self.variables[symbol].scope = "body"
+                                self.variables[symbol].allocated = True
+                                newBlock = Block(Allocate(self.variables[symbol]))
+                                symboldict[newBlock] = set(symbolcollector.visit(newBlock))
+                                node.blocks = node.blocks[:ind] + [newBlock] + node.blocks[ind:]
+                                return ind - 1
+            return None
+
+        start = -1
+        while True:
+            start = check_blocks(start)
+            if start is None:
+                break
+
         return [self.visit(block) for block in node.blocks]
 
 class IterableFunctionVisitor(ast.NodeVisitor):
