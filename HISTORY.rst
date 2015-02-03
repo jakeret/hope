@@ -3,6 +3,12 @@
 History
 -------
 
+0.3.2 (2015-xx-xx)
+++++++++++++++++++
+
+* Support for variable allocation within if-else
+
+
 0.3.1 (2014-10-24)
 ++++++++++++++++++
 

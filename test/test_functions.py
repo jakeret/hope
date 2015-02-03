@@ -219,6 +219,20 @@ def test_func_sum_invalid_args():
     with pytest.raises(UnsupportedFeatureException):
         hfkt(a)
 
+@pytest.mark.parametrize("dtype,shape", itertools.product(dtypes, shapes))
+def test_func_sum_in_if(dtype, shape):
+    def fkt(a):
+        if True:
+            val = np.sum(a)
+        else:
+            val = 1
+        return val
+    hfkt = hope.jit(fkt)
+    ao, ah = random(dtype, shape)
+    ao, ah = ao / 1200, ah / 1200
+    co, ch = fkt(ao), hfkt(ah)
+    assert check(co, ch)
+
 def test_create_empty_array():
     def fkt(shape):
         return np.empty(shape)

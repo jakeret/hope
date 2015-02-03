@@ -63,7 +63,7 @@ def test_pycosmo_1():
     assert check(ro, rh)
 
 def test_pycosmo_1_opt():
-    def pycosmo(y, lna, k, eta, hubble_a, tdot, omega_gam, omega_neu, omega_dm_0, omega_b_0, ha, rh, r_bph_a, xc_damp):
+    def pycosmo_opt(y, lna, k, eta, hubble_a, tdot, omega_gam, omega_neu, omega_dm_0, omega_b_0, ha, rh, r_bph_a, xc_damp):
         a=np.exp(lna)
         psi=-y[0]-12./(rh*k*a)**2*(omega_gam*y[9]+omega_neu*y[6+2*10+3])
         dphidlna=psi-k**2/(3.*a**2*ha**2)*y[0]+0.5/(ha*rh)**2*(omega_dm_0*a**(-3)*y[1]+omega_b_0*a**(-3)*y[3]+4.*omega_gam*a**(-4)*y[5]+4.*omega_neu*a**(-4)*y[6+2*10+1])
@@ -109,8 +109,8 @@ def test_pycosmo_1_opt():
     omega_gam, omega_neu, omega_dm_0, omega_b_0 = 5.04081632653e-05, 3.43441882421e-05, 0.255, 0.045
     ha, rh, r_bph_a, xc_damp = 214995844.604, 4282.7494, 6.69534412955e-05, 1
     hope.config.optimize = True
-    hfkt = hope.jit(pycosmo)
-    ro = pycosmo(y, lna, k, eta, hubble_a, tdot, omega_gam, omega_neu, omega_dm_0, omega_b_0, ha, rh, r_bph_a, xc_damp)
+    hfkt = hope.jit(pycosmo_opt)
+    ro = pycosmo_opt(y, lna, k, eta, hubble_a, tdot, omega_gam, omega_neu, omega_dm_0, omega_b_0, ha, rh, r_bph_a, xc_damp)
     rh = hfkt(y, lna, k, eta, hubble_a, tdot, omega_gam, omega_neu, omega_dm_0, omega_b_0, ha, rh, r_bph_a, xc_damp)
     assert check(ro, rh)
     hope.config.optimize = False
