@@ -3,12 +3,14 @@
 History
 -------
 
-0.4.0 (2015-xx-xx)
+0.4.0 (2015-02-04)
 ++++++++++++++++++
 
+* Increased compilation speed for large functions
 * Support for variable allocation within if-else
 * Added support for numpy.sign
-* Improve compilation speed for large functions
+* Updated Cython implementation in benchmarks
+* Fixed array allocation problem under OSX Yosemite (thx iankronquist)
 
 0.3.1 (2014-10-24)
 ++++++++++++++++++

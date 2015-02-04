@@ -31,7 +31,7 @@ By using **HOPE**, the user can benefit from being able to write common numerica
         
 The **HOPE** package has been developed at ETH Zurich in the `Software Lab of the Cosmology Research Group <http://www.astro.ethz.ch/refregier/research/Software>`_ of the `ETH Institute of Astronomy <http://www.astro.ethz.ch>`_, and is now publicly available at `GitHub <https://github.com/cosmo-ethz/hope>`_. 
 
-Further information on the package can be found in our `paper <http://arxiv.org/abs/1410.4345>`_,  on `pythonhosted.org <http://pythonhosted.org/hope>`_  and on our `website <http://hope.phys.ethz.ch>`_. 
+Further information on the package can be found in our `paper <http://www.sciencedirect.com/science/article/pii/S2213133714000687>`_,  on `pythonhosted.org <http://pythonhosted.org/hope>`_  and on our `website <http://hope.phys.ethz.ch>`_. 
 
 Installation
 ------------

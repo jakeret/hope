@@ -237,7 +237,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'hope', u'hope Documentation',
-   u'Lukas Gamper', 'hope', 'One line description of project.',
+   u'Lukas Gamper', 'hope', 'HOPE - combine the ease of Python and the speed of C++',
    'Miscellaneous'),
 ]
 
