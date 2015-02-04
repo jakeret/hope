@@ -181,6 +181,7 @@ NumPy Mathematical functions
 ``trunc(x)``                         Return the truncated value of the input, element-wise.
 ``pi``                               Returns the pi constant
 ``fabs``                             Compute the absolute values element-wise
+``sign``                             Returns an element-wise indication of the sign of a number
 ==================================== =======================================================================================
 
 

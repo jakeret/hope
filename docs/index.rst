@@ -21,7 +21,7 @@ Contents
 Benchmarks
 ----------
 
-All the benchmarks have been made available online as `IPython notebooks <http://refreweb.phys.ethz.ch/hope/benchmark.html>`_. If you would like to run the benchmarks on your machine, you can download the notebooks in the nbviewer. 
+All the benchmarks have been made available online as `IPython notebooks <http://refreweb.phys.ethz.ch/hope/benchmark.html>`_ (also on `GitHub <https://github.com/cosmo-ethz/hope/tree/master/benchmarks>`_). If you would like to run the benchmarks on your machine, you can download the notebooks in the nbviewer. 
 
 **Note**: Make sure to execute the *native_cpp_gen* the first time in order to generate the native C++ code and some Python utility modules.
 
