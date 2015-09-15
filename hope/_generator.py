@@ -581,7 +581,6 @@ def _run_fkt_code(modtoken):
             code += "\t\t\t\t\treturn res;\n"
         else:
             code += "\t\t\t\t\tPyObject * res = std::get<0>({0});\n".format(call)
-            code += "\n\t\t\t\t\tPy_INCREF(res);\n"
             code += "\t\t\t\t\treturn res;\n"
         code += "\t\t\t\t} catch (...) {\n"
         code += "\t\t\t\t\treturn NULL;\n"
