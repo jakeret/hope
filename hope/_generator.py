@@ -262,7 +262,7 @@ class CPPGenerator(NodeVisitor):
             raise Exception("Unknown dtype: {0}".format(variable.dtype))
         for segment in variable.shape:
             if not segment[0] is None:
-                raise Exception("Allocate need to have (:len)* in shape: {0}".format(",".join([str(segment) for sgment in variable.shape])))
+                raise Exception("Allocate need to have (:len)* in shape: {0}".format(",".join([str(sgment) for sgment in variable.shape])))
             shape.append(self.visit(segment[1]))
         if len(shape) == 0:
             return "{0} c{1} = {0}();".format(PY_C_TYPE[variable.dtype], variable.name)
