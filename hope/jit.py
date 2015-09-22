@@ -33,7 +33,6 @@ from hope._wrapper import get_fkt_hash
 # TODO: use https://github.com/workhorsy/py-cpuinfo/blob/master/cpuinfo.py to detect features
 # TODO: other code generator: http://documen.tician.de/codepy/jit.html#module-codepy.jit
 # TODO: make ufunc decorator http://docs.scipy.org/doc/numpy/reference/ufuncs.html like numba http://numba.pydata.org/numba-doc/0.12.1/ufuncs.html
-# TODO: check if reference count of new allocated array is correct (memory leaks)
 # TODO: optimize pow with interger powers to multipications
 # TODO: make tests for _dump
 # TODO: add constants/class constants to hope
