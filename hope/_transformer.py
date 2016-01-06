@@ -91,19 +91,24 @@ class AllocateVisitor(NodeVisitor):
         
     def generic_visit(self, node):
         pass
+    
     def visit_If(self, node):
         self.visit(node.body)
         if node.orelse is not None:
             self.visit(node.orelse)
+            
     def visit_For(self, node):
         scope = node.iter.scope
         node.iter.scope = "body"
         self.visit(node.body)
         node.iter.scope = scope
+        
     def visit_While(self, node):
         self.visit(node.body)
+        
     def visit_Block(self, node):
         return [self.visit(block) for block in node.body]
+    
     def visit_Body(self, node):
         symbolcollector = SymbolNamesCollector()
         symboldict = {block: set(symbolcollector.visit(block)) for block in node.blocks}
@@ -562,6 +567,11 @@ class ASTTransformer(ast.NodeVisitor):
             self.merge_shapes(self.variables[name], value)
             self.exprs.append(Assign(self.variables[name], value))
             value = self.variables[name]
+            
+        if isinstance(value, (Variable, NewVariable)):
+            # ensure Py_INCREF is added when appropriate to avoid mem leak or segfault
+            self.token.return_allocated = value.allocated
+        
         if not self.token.dtype is None and self.token.dtype != value.dtype:
             raise Exception("None unique return type")
         
