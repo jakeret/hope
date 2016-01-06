@@ -62,9 +62,13 @@ def test_augmented_div(dtype, shape):
     def fkt(a, c):
         c[:] /= a
     hfkt = hope.jit(fkt)
-    (ao, ah), (co, ch) = random(dtype, shape), random(dtype, shape)
+    
+    (ao, ah) = random(dtype, shape)
+    (co, ch) = random(np.float64, shape)
+    
     if np.count_nonzero(ao == 0) > 0: ao[ao == 0] += 1
     if np.count_nonzero(ah == 0) > 0: ah[ah == 0] += 1
+    
     ro, rh = fkt(ao, co),  hfkt(ah, ch)
     if dtype in [np.float32, np.float64, float]:
         co[co < 1. /  (np.finfo(dtype).max * np.finfo(dtype).resolution)] /= np.finfo(dtype).resolution
