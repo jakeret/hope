@@ -350,6 +350,7 @@ class FunctionDef(Token):
     def __init__(self, name, signature):
         self.name, self.signature, self.shape, self.dtype, self.merged, self.shapes, self.decl, self.optimized, self.isbound \
             = name, signature, None, None, {}, {}, None, False, len(signature) > 0 and isinstance(signature[0], Object)
+        self.return_allocated = True
 
     def getId(self):
         return "".join([arg.getId() for arg in self.signature])

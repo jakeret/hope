@@ -10,12 +10,14 @@ import hope, itertools, pytest, sys, sysconfig, os, shutil
 
 from test.utilities import random, check, make_test, JENKINS, min_dtypes, dtypes, shapes, setup_module, setup_method, teardown_module
 
+#hope.config.keeptemp = True
+
 def test_ufig_sin_cos():
     sinTable = np.sin(np.array(range(0, (1 << 11) + 1), dtype=np.float64) * 2. * np.pi / np.float64(1 << 11))
     cosTable = np.cos(np.array(range(0, (1 << 11) + 1), dtype=np.float64) * 2. * np.pi / np.float64(1 << 11))
     rngBuffer = np.random.randint(0, 1<<32, size=(44497,)).astype(np.uint32)
 
-    def sncn(pt, rng, sinTable, cosTable):
+    def fkt_sncn(pt, rng, sinTable, cosTable):
         scL = rng >> (32 - 11)
         scB = np.float64(rng & np.uint32((1 << (32 - 11)) - 1)) / np.float64(1 << (32 - 11))
         scA = 1. - scB
@@ -25,10 +27,10 @@ def test_ufig_sin_cos():
     rngBuffer = np.random.randint(0, 1<<32, size=(1000,)).astype(np.uint32)
     pt, hpt = np.array([0., 0.]), np.array([0., 0.])
     hope.config.optimize = True
-    hsncn = hope.jit(sncn)
+    hsncn = hope.jit(fkt_sncn)
 
     for rng in rngBuffer:
-        sncn(pt, rng, sinTable, cosTable)
+        fkt_sncn(pt, rng, sinTable, cosTable)
         hsncn(hpt, rng, sinTable, cosTable)
         assert check(pt, hpt)
         ang = rng / float(1 << 32) * 2. * np.pi
@@ -61,7 +63,7 @@ def test_ufig_gal_intrinsic():
         radiusTable[i][1 << 11] = (np.power(gammaincinv(2. * n, (1. - 1e-15) / np.float64(1 << 11)), n) / np.power(k, n)).astype(np.float32)
         radiusTable[i][1 << (11 + 1)] = (np.power(gammaincinv(2. * n, 1. - 1. / np.float64(1 << 3) + (1. - 1e-15) / np.float64(1 << (11 + 3))), n) / np.power(k, n)).astype(np.float32)
 
-    def intrinsic(rng, sersicLTable, sersicBTable, radiusTable):
+    def fkt_intrinsic(rng, sersicLTable, sersicBTable, radiusTable):
         drMaski = rng >> (32 - 3) == (1 << 3) - 1
         drKi = rng >> np.uint32(drMaski * 3)
         drLi = (drKi >> (32 - 11)) + np.uint32(drMaski * (1 << 11))
@@ -77,10 +79,10 @@ def test_ufig_gal_intrinsic():
 
     rngBuffer = np.random.randint(0, 1<<32, size=(1000,)).astype(np.uint32)
     hope.config.optimize = True
-    hintrinsic = hope.jit(intrinsic)
+    hintrinsic = hope.jit(fkt_intrinsic)
 
     for rng in rngBuffer:
-        dr = intrinsic(rng, sersicLTable, sersicBTable, radiusTable)
+        dr = fkt_intrinsic(rng, sersicLTable, sersicBTable, radiusTable)
         hdr = hintrinsic(rng, sersicLTable, sersicBTable, radiusTable)
         assert check(dr, hdr)
     hope.config.optimize = False
@@ -88,18 +90,18 @@ def test_ufig_gal_intrinsic():
 
 def test_ufig_bincount():
 
-    def bincount(buffer, x, y, size, size_x, size_y):
+    def fkt_bincount(buffer, x, y, size, size_x, size_y):
         for idx in range(size):
             if x[idx]>= 0 and x[idx] <= size_x and y[idx] >= 0 and y[idx] <= size_y:
                 buffer[x[idx], y[idx]] += 1.
     hope.config.optimize = True
-    hbincount = hope.jit(bincount)
+    hbincount = hope.jit(fkt_bincount)
     
     x = np.random.uniform(-1, 6, size=(1000,))
     y = np.random.uniform(-1, 6, size=x.shape)
     buffer, hbuffer = np.zeros((5, 5)), np.zeros((5, 5))
 
-    bincount(buffer, x, y, x.size, 5., 5.)
+    fkt_bincount(buffer, x, y, x.size, 5., 5.)
     hbincount(hbuffer, x, y, x.size, 5., 5.)
     hope.config.optimize = False
     assert check(buffer, hbuffer)
@@ -132,18 +134,26 @@ def test_ufig_star(dtype):
         , 0.1294849661688696932706 / 2 \
     ], dtype=dtype)
     w2D = np.outer(w1D, w1D)
-    def pdf(density, dims, center, w2D, r50, b, a):
+    def fkt_pdf(density, dims, center, w2D, r50, b, a):
         for x in range(dims[0]):
             for y in range(dims[1]):
                 dr = np.sqrt((x - center[0]) ** 2 + (y - center[1]) ** 2)
                 density[x, y] = np.sum(w2D * 2 * (b - 1) / (2 * np.pi * (r50 * a)**2) * (1 + (dr / (r50 * a))**2)**(-b))
         return density
     hope.config.optimize = True
-    hpdf = hope.jit(pdf)
+    hpdf = hope.jit(fkt_pdf)
 
     density = np.zeros((dims[0], dims[1]), dtype=dtype)
-    pdf(density, dims, center, w2D, r50, b, a)
+    fkt_pdf(density, dims, center, w2D, r50, b, a)
     hdensity = np.zeros((dims[0], dims[1]), dtype=dtype)
     hpdf(hdensity, dims, center, w2D, r50, b, a)
     hope.config.optimize = False
+#     print("going to sleep")
+#     import time
+#     time.sleep(10)
     assert check(density, hdensity)
+
+    if np.all(hdensity == 1):
+        print("asdf")
+    else:
+        print("else")
