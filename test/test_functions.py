@@ -19,9 +19,6 @@ from hope.exceptions import UnsupportedFeatureException
 @pytest.mark.parametrize("dtype", [np.float64, float])
 def test_func_interp(dtype):
     
-    #TODO: check why test is failing on travis but ok everywhere else
-    pytest.skip("Fails on travis")
-    
     def fkt(x, y, x0, y0, s0, l0, r0):
         y0[:] = np.interp(x0, x, y)
         l0[:] = np.interp(x0 - 1, x, y, left=-1)
