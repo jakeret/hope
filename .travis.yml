@@ -1,5 +1,9 @@
 # Config file for automatic testing at travis-ci.org
 language: python
+python:
+- "3.4"
+- "3.3"
+- "2.7"
 
 # install gcc 4.8 for cxx11
 before_install:
@@ -8,22 +12,19 @@ before_install:
   - sudo apt-get -qq install g++-4.8 gcc-4.8
   - sudo ln -sf /usr/bin/gcc-4.8 /usr/bin/gcc
   - sudo ln -sf /usr/bin/g++-4.8 /usr/bin/g++
-  - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
-  - chmod +x miniconda.sh
-  - ./miniconda.sh -b
-  - export PATH=/home/travis/miniconda/bin:$PATH
+  # We do this conditionally because it saves us some downloading if the
+  # version is the same.
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+      wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+    else
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+    fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
   - conda update --yes conda
-  # The next couple lines fix a crash with multiprocessing on Travis and are not specific to using Miniconda
-  - sudo rm -rf /dev/shm
-  - sudo ln -s /run/shm /dev/shm
-
-python:
-- "3.4"
-- "3.3"
-- "2.7"
+  - travis_retry conda install --yes python=$TRAVIS_PYTHON_VERSION pip numpy
 
 install:
-  - conda install --yes python=$TRAVIS_PYTHON_VERSION atlas numpy pip
   - pip install coveralls
   - pip install -r requirements.txt
 
