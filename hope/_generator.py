@@ -227,10 +227,7 @@ class CPPGenerator(NodeVisitor):
             return "1" if node.name.name == "ones" else "0"
         elif isinstance(node.name, NumpyAttr) and node.name.name == "interp":
             self.library["numpy_interp"] = LIBRARY_NUMPY_INTERP
-            ((lower, upper),) = node.args[1].shape
-            left = 0 if lower is None else self.visit(lower)
-            size = self.visit(upper) + ("" if lower is None else "-{0}".format(self.visit(lower)))
-            right = "c{0}[{1}]".format(node.args[1].name, size + "-1")
+
             args = [[] for _ in range(3)]
             for i in range(1, 3):
                 if isinstance(node.args[i], ObjectAttr):
@@ -241,12 +238,30 @@ class CPPGenerator(NodeVisitor):
                     args[i] = ".c".join(trace)
                 else:
                     args[i] = node.args[i].name
+                    
             # TODO: make sure node.args[1].shape == node.args[2].shape using an assert
+            
+            ((lower, upper),) = node.args[1].shape
+            left_val = "c{0}[0]".format(node.args[1].name) if lower is None else self.visit(lower)
+            size = self.visit(upper) + ("" if lower is None else "-{0}".format(self.visit(lower)))
+            right_val = "c{0}[{1}]".format(node.args[1].name, size + "-1")
+
             ret = "numpy_interp({0}, c{1}, c{2}, {3})".format(self.visit(node.args[0]), args[1], args[2], size)
+            
             if "left" in node.keywords:
-                ret = "{0} < {1} ? {2} : ({3})".format(self.visit(node.args[0]), left, self.visit(node.keywords["left"]), ret)
+                left_ret = self.visit(node.keywords["left"])
+            else:
+                left_ret = left_val
+                
+            ret = "{0} < {1} ? {2} : ({3})".format(self.visit(node.args[0]), left_val, left_ret, ret)
+                
             if "right" in node.keywords:
-                ret = "{0} > {1} ? {2} : ({3})".format(self.visit(node.args[0]), right, self.visit(node.keywords["right"]), ret)
+                right_ret = self.visit(node.keywords["right"])
+            else:
+                right_ret = right_val
+                
+            ret = "{0} > {1} ? {2} : ({3})".format(self.visit(node.args[0]), right_val, right_ret, ret)
+                
             return "({0})".format(ret)
         elif isinstance(node.name, NumpyAttr) and node.name.name == "sign":
             self.library["native_sign"] = LIBRARY_NATIVE_SIGN
