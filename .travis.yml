@@ -1,5 +1,9 @@
 # Config file for automatic testing at travis-ci.org
 language: python
+python:
+- "3.4"
+- "3.3"
+- "2.7"
 
 # install gcc 4.8 for cxx11
 before_install:
@@ -8,19 +12,21 @@ before_install:
   - sudo apt-get -qq install g++-4.8 gcc-4.8
   - sudo ln -sf /usr/bin/gcc-4.8 /usr/bin/gcc
   - sudo ln -sf /usr/bin/g++-4.8 /usr/bin/g++
+  # We do this conditionally because it saves us some downloading if the
+  # version is the same.
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+      wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+    else
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+    fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - conda update --yes conda
+  - travis_retry conda install --yes python=$TRAVIS_PYTHON_VERSION pip numpy
 
-python:
-- "3.4"
-- "3.3"
-- "2.7"
-# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-# Note: we only use coveralls with Travis, not tox. pip install coveralls doesn't work on Windows.
-# This setup makes it possible for:
-# 1. the tests to be run with tox on Windows
-# 2. Windows users to use the requirements files without running into installation problems.
 install:
-- pip install coveralls
-- pip install -r requirements.txt
+  - pip install coveralls
+  - pip install -r requirements.txt
 
 # command to run tests, e.g. python setup.py test
 script: coverage run --source hope setup.py test
