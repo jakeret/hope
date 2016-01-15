@@ -48,3 +48,6 @@ htmlcov/
 # Local env
 .envs
 .hope
+/.cache/
+/.ipynb_checkpoints/
+/.settings/

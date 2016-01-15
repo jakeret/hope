@@ -22,12 +22,13 @@ clean-pyc:
 	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '*~' -exec rm -f {} +
 	find . -name '__pycache__' -exec rm -rf {} +
+	find . -name '.hope' -exec rm -rf {} +
 
 lint:
 	flake8 hope test
 
 test:
-	py.test
+	py.test -v -s
 
 test-all:
 	tox
