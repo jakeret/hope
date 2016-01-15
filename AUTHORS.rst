@@ -26,7 +26,7 @@ Citations
 
 As you use **HOPE** for your exciting discoveries, please cite the paper that describes the package: 
 
-`Akeret, J., Gamper, L., Amara, A. and Refregier, A., Astronomy and Computing (submitted 2015) <http://www.sciencedirect.com/science/article/pii/S2213133714000687>`_
+`Akeret, J., Gamper, L., Amara, A. and Refregier, A., Astronomy and Computing (2015) <http://www.sciencedirect.com/science/article/pii/S2213133714000687>`_
 
 Feedback
 --------
