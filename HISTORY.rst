@@ -3,6 +3,11 @@
 History
 -------
 
+0.5.0 (2016-01-08)
+++++++++++++++++++
+
+* Fixed memory leak when creating array in jitted fkt
+
 0.4.0 (2015-02-04)
 ++++++++++++++++++
 

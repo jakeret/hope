@@ -17,7 +17,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 __all__ = ["jit", "config", "serialize", "unserialize"]
 __author__ = "Lukas Gamper, Joel Akeret"
 __email__ = "hope@phys.ethz.ch"
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 __credits__ = "ETH Zurich, Institute for Astronomy"
 
 from hope import config

@@ -8,9 +8,6 @@ HOPE - combine the ease of Python and the speed of C++
 .. image:: https://travis-ci.org/cosmo-ethz/hope.png?branch=master
         :target: https://travis-ci.org/cosmo-ethz/hope
         
-.. image:: https://pypip.in/d/hope/badge.png
-        :target: https://crate.io/packages/hope?version=latest
-
 .. image:: https://coveralls.io/repos/cosmo-ethz/hope/badge.png?branch=master
         :target: https://coveralls.io/r/cosmo-ethz/hope?branch=master
 
@@ -32,9 +29,9 @@ By using **HOPE**, the user can benefit from being able to write common numerica
         return x + y
 
         
-The **HOPE** package has been developed at ETH Zurich in the `Software Lab of the Cosmology Research Group <http://www.astro.ethz.ch/refregier/research/Software>`_ of the `ETH Institute of Astronomy <http://www.astro.ethz.ch>`_, and is now publicly available at `GitHub <https://github.com/cosmo-ethz/hope>`_. 
+The **HOPE** package has been developed at ETH Zurich in the `Software Lab of the Cosmology Research Group <http://www.cosmology.ethz.ch/research/software-lab.html>`_ of the `ETH Institute of Astronomy <http://www.astro.ethz.ch/>`_, and is now publicly available at `GitHub <https://github.com/cosmo-ethz/hope>`_. 
 
-Further information on the package can be found in our `paper <http://www.sciencedirect.com/science/article/pii/S2213133714000687>`_,  on `pythonhosted.org <http://pythonhosted.org/hope>`_  and on our `website <http://hope.phys.ethz.ch>`_. 
+Further information on the package can be found in our `paper <http://www.sciencedirect.com/science/article/pii/S2213133714000687>`_,  on `readthedocs.org <http://hope.readthedocs.org/en/latest/>`_  and on our `website <http://hope.phys.ethz.ch>`_. 
 
 Installation
 ------------
