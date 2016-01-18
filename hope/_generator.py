@@ -251,14 +251,14 @@ class CPPGenerator(NodeVisitor):
             if "left" in node.keywords:
                 left_ret = self.visit(node.keywords["left"])
             else:
-                left_ret = left_val
+                left_ret = "c{0}[0]".format(args[2])
                 
             ret = "{0} < {1} ? {2} : ({3})".format(self.visit(node.args[0]), left_val, left_ret, ret)
                 
             if "right" in node.keywords:
                 right_ret = self.visit(node.keywords["right"])
             else:
-                right_ret = right_val
+                right_ret = "c{0}[{1}]".format(args[2], size + "-1")
                 
             ret = "{0} > {1} ? {2} : ({3})".format(self.visit(node.args[0]), right_val, right_ret, ret)
                 
