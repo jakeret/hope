@@ -25,8 +25,6 @@ def test_func_interp(dtype):
         r0[:] = np.interp(x0 + 1, x, y, right=2)
         s0[0] = np.interp(x0[0], x, y)
     hfkt = hope.jit(fkt)
-    x = np.linspace(0, 1, 5)
-    y = np.linspace(0, 1, 5)
     x0 = np.linspace(0, 1, 50)
     x = np.linspace(0, 1, 10).astype(dtype)
     y = np.linspace(0, 1, 10).astype(dtype)
@@ -41,6 +39,19 @@ def test_func_interp(dtype):
     assert check(so, sh)
     assert check(lo, lh)
     assert check(ro, rh)
+    
+@pytest.mark.parametrize("dtype", [np.float64, float])
+def test_func_interp_bounds(dtype):
+    def fkt(x,y,x0,y0):
+        y0[:] = np.interp(x0, x, y)
+    
+    hfkt = hope.jit(fkt)
+    x = np.arange(5,15).astype(dtype)
+    y = -x
+    x0 = np.arange(0, 20).astype(dtype)
+    yo, yh = np.zeros_like(x0), np.zeros_like(x0)
+    fkt(x, y, x0, yo), hfkt(x, y, x0, yh)
+    assert check(yo, yh)
 
 @pytest.mark.parametrize("dtype,shape", itertools.product([np.float32, np.float64, float], shapes))
 @make_test
