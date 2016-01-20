@@ -19,6 +19,7 @@ We would like to thank several people for helping to test this package before re
 * Claudio Bruderer
 * Chihway Chang
 * Sebastian Gaebel 
+* Joerg Herbel 
 
 
 Citations
