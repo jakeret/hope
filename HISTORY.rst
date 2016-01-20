@@ -3,10 +3,11 @@
 History
 -------
 
-0.5.0 (2016-01-08)
+0.5.0 (2016-01-20)
 ++++++++++++++++++
 
 * Fixed memory leak when creating array in jitted fkt
+* Fixed incorrect bound handling in numpy.interp
 
 0.4.0 (2015-02-04)
 ++++++++++++++++++
