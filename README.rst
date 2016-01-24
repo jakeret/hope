@@ -2,13 +2,13 @@
 HOPE - combine the ease of Python and the speed of C++
 ======================================================
 
-.. image:: https://badge.fury.io/py/hope.png
+.. image:: https://badge.fury.io/py/hope.svg
     :target: http://badge.fury.io/py/hope
 
-.. image:: https://travis-ci.org/cosmo-ethz/hope.png?branch=master
+.. image:: https://travis-ci.org/cosmo-ethz/hope.svg?branch=master
         :target: https://travis-ci.org/cosmo-ethz/hope
         
-.. image:: https://coveralls.io/repos/cosmo-ethz/hope/badge.png?branch=master
+.. image:: https://coveralls.io/repos/cosmo-ethz/hope/badge.svg?branch=master
         :target: https://coveralls.io/r/cosmo-ethz/hope?branch=master
 
 .. image:: http://img.shields.io/badge/arXiv-1410.4345-brightgreen.svg?style=flat
