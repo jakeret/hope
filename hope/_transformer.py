@@ -377,6 +377,11 @@ class ASTTransformer(ast.NodeVisitor):
             raise Exception("Step size other than 1 are not supported")
         lower = node.lower if node.lower is None else self.visit(node.lower)
         upper = node.upper if node.upper is None else self.visit(node.upper)
+        if isinstance(lower, Number) and lower.value < 0:
+            raise UnsupportedFeatureException("Negative slices not supported")
+        if isinstance(upper, Number) and upper.value < 0:
+            raise UnsupportedFeatureException("Negative slices not supported")
+        
         return [(lower, upper)]
 
     def visit_ExtSlice(self, node):

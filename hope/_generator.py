@@ -24,14 +24,14 @@ class CPPGenerator(NodeVisitor):
     def getVariableExtent(self, node):
         extent = ""
         for ind, segment in enumerate(node.shape):
-            segmentstr = "{0}:{1}".format("" if segment[0] is None else self.dumper.visit(segment[0]), self.dumper.visit(segment[1]))
+            segmentstr = self.get_segmentstr(*segment)
             if not segment[0] is None:
                 raise Exception("Variable slices needs to start with None: {0}".format(node.name))
             if not segmentstr in self.merged:
                 raise Exception("Unknown slice {0} in variable {1}".format(segmentstr, node.name))
             if ind > 0:
                 extent = "({0})*{1}".format(extent, self.visit(segment[1]))
-            extent += "{0}{1}".format(" + " if len(extent) > 0 else "", self.slicemap[self.merged[segmentstr]])
+            extent += "{0}{1}".format(" + " if len(extent) > 0 else "", self.slicemap[self.get_slicemap_key(ind, *segment)])
         return extent
 
     def visit_Number(self, node):
@@ -84,7 +84,9 @@ class CPPGenerator(NodeVisitor):
                 if isinstance(lower, Number) and lower.value == 0: lower = None
                 if upper is None: upper = segment[1]
                 seg = "{0} + ".format(self.visit(lower)) if not lower is None else ""
-                seg += self.slicemap[self.merged["{0}:{1}".format("" if lower is None else self.dumper.visit(lower), self.dumper.visit(upper))]]
+                key = self.get_slicemap_key(ind, lower, upper)
+                seg += self.slicemap[key]
+#                 seg += self.slicemap[self.merged["{0}:{1}".format("" if lower is None else self.dumper.visit(lower), self.dumper.visit(upper))]]
                 segstr = "{0}:{1}".format("" if lower is None else self.dumper.visit(lower), self.dumper.visit(upper))
             else:
                 seg = self.visit(extent)
@@ -111,6 +113,7 @@ class CPPGenerator(NodeVisitor):
             raise Exception("Only the numpy.sum contraction is implemented!")
         if len(node.value.shape):
             ret = "{0} = ({1})0;\n".format(self.visit(node.variable), PY_C_TYPE[node.dtype])
+            keys = []
             for ind, segment in enumerate(node.value.shape):
                 ret += "{0}for (npy_intp i{1} = 0; i{1} < {2} - {3}; ++i{1}) {{\n".format( \
                       "\t" * ind \
@@ -118,14 +121,15 @@ class CPPGenerator(NodeVisitor):
                     , self.visit(segment[1]) \
                     , 0 if segment[0] is None else self.visit(segment[0]) \
                 )
-                segmentstr = "{0}:{1}".format("" if segment[0] is None else self.dumper.visit(segment[0]), self.dumper.visit(segment[1]))
+                segmentstr = self.get_segmentstr(*segment)
                 if not segmentstr in self.merged:
                     self.merged[segmentstr] = segmentstr
-                self.slicemap[self.merged[segmentstr]] = "i{0}".format(self.next_loopid)
+                keys.append(self.get_slicemap_key(ind, *segment))
+                self.slicemap[keys[-1]] = "i{0}".format(self.next_loopid)
                 self.next_loopid += 1
             ret += "{0}{1} += {2};".format("\t" * len(node.value.shape), self.visit(node.variable), self.visit(node.value))
-            for ind, segment in enumerate(node.value.shape):
-                del self.slicemap[self.merged["{0}:{1}".format("" if segment[0] is None else self.dumper.visit(segment[0]), self.dumper.visit(segment[1]))]]
+            for ind, (key, segment) in enumerate(zip(keys, node.value.shape)):
+                del self.slicemap[key]
                 ret += "\n{0}}}".format("\t" * (len(node.value.shape) - 1 - ind))
             return ret
         else:
@@ -299,6 +303,7 @@ class CPPGenerator(NodeVisitor):
     def visit_Block(self, node):
         if len(node.shape):
             ret = "";
+            keys = []
             for ind, segment in enumerate(node.shape):
                 ret += "{0}for (npy_intp i{1} = 0; i{1} < {2} - {3}; ++i{1}) {{\n".format( \
                       "\t" * ind \
@@ -306,12 +311,13 @@ class CPPGenerator(NodeVisitor):
                     , self.visit(segment[1]) \
                     , 0 if segment[0] is None else self.visit(segment[0]) \
                 )
-                self.slicemap[self.merged["{0}:{1}".format("" if segment[0] is None else self.dumper.visit(segment[0]), self.dumper.visit(segment[1]))]] = "i{0}".format(self.next_loopid)
+                keys.append(self.get_slicemap_key(ind, *segment))
+                self.slicemap[keys[-1]] = "i{0}".format(self.next_loopid)
                 self.next_loopid += 1
             ret += "{0}".format("\t" * len(node.shape))
             ret += "\n{0}".format("\t" * len(node.shape)).join("\n".join([self.visit(expr) for expr in node.body]).split("\n"))
-            for ind, segment in enumerate(node.shape):
-                del self.slicemap[self.merged["{0}:{1}".format("" if segment[0] is None else self.dumper.visit(segment[0]), self.dumper.visit(segment[1]))]]
+            for ind, (key, segment) in enumerate(zip(keys, node.shape)):
+                del self.slicemap[key]
                 ret += "\n{0}}}".format("\t" * (len(node.shape) - 1 - ind))
             return ret
         else:
@@ -382,7 +388,12 @@ class CPPGenerator(NodeVisitor):
         return "\n".join(list(self.library.values())) + code
 
 
-
+    def get_segmentstr(self, lower, upper):
+        return "{0}:{1}".format("" if lower is None else self.dumper.visit(lower), self.dumper.visit(upper))
+    
+    def get_slicemap_key(self, ind, lower, upper):
+        segmentstr = self.get_segmentstr(lower, upper)
+        return "{0}-{1}".format(ind, self.merged[segmentstr])
 
 def generate(modtoken, localfilename):
     """
