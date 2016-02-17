@@ -322,7 +322,12 @@ class ASTTransformer(ast.NodeVisitor):
         return View(self.visit(node.value), self.visit(node.slice))
 
     def visit_UnaryOp(self, node):
-        return UnaryOp(type(node.op).__name__, self.visit(node.operand))
+        op = type(node.op).__name__
+        operand = self.visit(node.operand)
+        if isinstance(operand, Number):
+            opname, _ = UNARY_OPERATORS[op]
+            return operand if opname == "+" else Number(-operand.value)
+        return UnaryOp(op, operand)
 
     def visit_BinOp(self, node):
         left, right = self.visit(node.left), self.visit(node.right)
