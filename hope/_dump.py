@@ -56,6 +56,9 @@ class Dumper(NodeVisitor):
             return "{0}@{1}".format(node.variable.name, node.dim)
         else:
             raise Exception("Unknown type {0}".format(node.variable.name))
+        
+    def visit_DimensionSlice(self, node):
+        return self.visit_Dimension(node)
 
     def visit_View(self, node):
         ret = node.variable.name

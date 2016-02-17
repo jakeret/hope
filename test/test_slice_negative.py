@@ -23,20 +23,18 @@ def test_negative_slice_1d_lower():
 def test_negative_slice_1d_upper():
     def fkt(a): a[:-1] = 1
     ah = np.zeros(10)
-    with pytest.raises(UnsupportedFeatureException):
-        hope.jit(fkt)(ah)
+    hope.jit(fkt)(ah)
+    assert np.all(ah[:-1] == 1)
+    assert ah[-1] == 0
 
 def test_negative_slice_1d_both():
     def fkt(a): a[1:-1] = 1
     ah = np.zeros(10)
-    with pytest.raises(UnsupportedFeatureException):
-        hope.jit(fkt)(ah)
-
-def test_negative_slice_1d_reverse():
-    def fkt(a): a[-1:1] = 1
-    ah = np.zeros(10)
-    with pytest.raises(UnsupportedFeatureException):
-        hope.jit(fkt)(ah)
+    hope.jit(fkt)(ah)
+    assert np.all(ah[1:-1] == 1)
+    assert ah[-1] == 0
+    assert ah[0] == 0
+    
 
 def test_negative_slice_2d_lower():
     def fkt(a): a[-1:, -1:] = 1
@@ -46,19 +44,15 @@ def test_negative_slice_2d_lower():
 
 def test_negative_slice_2d_upper():
     def fkt(a): a[:-1, :-1] = 1
-    ah = np.zeros((10,10))
-    with pytest.raises(UnsupportedFeatureException):
-        hope.jit(fkt)(ah)
+    ao, ah = np.zeros((10,10)), np.zeros((10,10))
+    fkt(ao)
+    hope.jit(fkt)(ah)
+    assert np.all(ao == ah)
 
 def test_negative_slice_2d_both():
     def fkt(a): a[1:-1, 1:-1] = 1
-    ah = np.zeros((10,10))
-    with pytest.raises(UnsupportedFeatureException):
-        hope.jit(fkt)(ah)
-
-def test_negative_slice_2d_reverse():
-    def fkt(a): a[-1:1, -1:1] = 1
-    ah = np.zeros((10,10))
-    with pytest.raises(UnsupportedFeatureException):
-        hope.jit(fkt)(ah)
+    ao, ah = np.zeros((10,10)), np.zeros((10,10))
+    fkt(ao)
+    hope.jit(fkt)(ah)
+    assert np.all(ao == ah)
 

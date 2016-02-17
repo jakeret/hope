@@ -36,6 +36,8 @@ class SymbolNamesCollector(NodeVisitor):
         return []
     def visit_Dimension(self, node):
         return [node.variable.name]
+    def visit_DimensionSlice(self, node):
+        return self.visit_Dimension(node)
     def visit_View(self, node):
         symbols = self.visit(node.variable)
         for upper, lower in node.shape:
@@ -379,9 +381,8 @@ class ASTTransformer(ast.NodeVisitor):
         upper = node.upper if node.upper is None else self.visit(node.upper)
         if isinstance(lower, Number) and lower.value < 0:
             raise UnsupportedFeatureException("Negative slices not supported")
-        if isinstance(upper, Number) and upper.value < 0:
-            raise UnsupportedFeatureException("Negative slices not supported")
-        
+#         if isinstance(upper, Number) and upper.value < 0:
+#             raise UnsupportedFeatureException("Negative slices not supported")
         return [(lower, upper)]
 
     def visit_ExtSlice(self, node):

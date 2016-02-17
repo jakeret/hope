@@ -115,6 +115,10 @@ class Dimension(Token):
             and isinstance(self.variable, Variable) and self.variable.name == other.variable.name and self.variable.dtype == other.variable.dtype \
             and len(self.variable.shape) == len(other.variable.shape) and self.variable.scope == other.variable.scope
 
+class DimensionSlice(Dimension):
+    def __init__(self, variable, dim, slice):
+        super(DimensionSlice, self).__init__(variable, dim)
+        self.slice = slice
 
 class View(Token):
     def __init__(self, variable, extents):
@@ -127,13 +131,16 @@ class View(Token):
         if len(variable.shape) != len(extents):
             raise Exception("Extends of variable and subscript do not match")
         self.variable, self.dtype, self.extents, self.shape = variable, variable.dtype, extents, []
-        for variable_extent, extent in zip(self.variable.shape, extents):
+        for ind, (variable_extent, extent) in enumerate(zip(self.variable.shape, extents[:])):
             # TODO: check if variable extends and extends do match
             if isinstance(extent, tuple):
                 lower, upper = extent
                 if lower is None: lower = variable_extent[0]
                 if isinstance(lower, Number) and lower.value == 0: lower = None
                 if upper is None: upper = variable_extent[1]
+                if isinstance(upper, Number) and upper.value < 0: 
+                    upper = DimensionSlice(variable, variable_extent[1].dim, upper)
+                    extents[ind] = (lower, copy.deepcopy(upper))
                 self.shape.append((lower, upper))
 
     def __eq__(self, other):

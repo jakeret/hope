@@ -72,8 +72,12 @@ class CPPGenerator(NodeVisitor):
         else:
             raise Exception("Unknown type {0}".format(node.variable.name))
 
+    def visit_DimensionSlice(self, node):
+        return "{0}+{1}".format(self.visit_Dimension(node), self.visit(node.slice))
+
     def visit_View(self, node):
         subscript = ""
+        extent_ind = 0
         for ind, (extent, segment) in enumerate(zip(node.extents, node.variable.shape)):
             if ind > 0:
                 subscript = "(int)({0})*{1}".format(subscript, self.visit(segment[1]))
@@ -84,10 +88,11 @@ class CPPGenerator(NodeVisitor):
                 if isinstance(lower, Number) and lower.value == 0: lower = None
                 if upper is None: upper = segment[1]
                 seg = "{0} + ".format(self.visit(lower)) if not lower is None else ""
-                key = self.get_slicemap_key(ind, lower, upper)
+                key = self.get_slicemap_key(extent_ind, lower, upper)
                 seg += self.slicemap[key]
 #                 seg += self.slicemap[self.merged["{0}:{1}".format("" if lower is None else self.dumper.visit(lower), self.dumper.visit(upper))]]
                 segstr = "{0}:{1}".format("" if lower is None else self.dumper.visit(lower), self.dumper.visit(upper))
+                extent_ind += 1
             else:
                 seg = self.visit(extent)
                 segstr = self.dumper.visit(extent)
@@ -305,20 +310,23 @@ class CPPGenerator(NodeVisitor):
             ret = "";
             keys = []
             for ind, segment in enumerate(node.shape):
-                ret += "{0}for (npy_intp i{1} = 0; i{1} < {2} - {3}; ++i{1}) {{\n".format( \
-                      "\t" * ind \
-                    , self.next_loopid \
-                    , self.visit(segment[1]) \
-                    , 0 if segment[0] is None else self.visit(segment[0]) \
-                )
+                ret += "{0}for (npy_intp i{1} = 0; i{1} < {2} - {3}; ++i{1}) {{\n".format(
+                          "\t" * ind, 
+                          self.next_loopid, 
+                          self.visit(segment[1]), 
+                          0 if segment[0] is None else self.visit(segment[0])
+                        )
                 keys.append(self.get_slicemap_key(ind, *segment))
                 self.slicemap[keys[-1]] = "i{0}".format(self.next_loopid)
                 self.next_loopid += 1
+                
             ret += "{0}".format("\t" * len(node.shape))
             ret += "\n{0}".format("\t" * len(node.shape)).join("\n".join([self.visit(expr) for expr in node.body]).split("\n"))
-            for ind, (key, segment) in enumerate(zip(keys, node.shape)):
+            
+            for ind, key in enumerate(keys):
                 del self.slicemap[key]
                 ret += "\n{0}}}".format("\t" * (len(node.shape) - 1 - ind))
+                
             return ret
         else:
             return "\n".join(["{0}".format(self.visit(expr)) for expr in node.body])
@@ -393,7 +401,7 @@ class CPPGenerator(NodeVisitor):
     
     def get_slicemap_key(self, ind, lower, upper):
         segmentstr = self.get_segmentstr(lower, upper)
-        return "{0}-{1}".format(ind, self.merged[segmentstr])
+        return "i{0}>{1}".format(ind, self.merged[segmentstr])
 
 def generate(modtoken, localfilename):
     """

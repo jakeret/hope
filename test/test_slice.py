@@ -84,3 +84,18 @@ def test_slice_1d_3(dtype):
 @pytest.mark.parametrize("dtype,shape", itertools.product(dtypes, shapes[1:]))
 @make_test
 def test_assign(a, b, c): c[:] = a
+
+
+@pytest.mark.parametrize("dtype", dtypes)
+def test_merged_slice(dtype):
+    def fkt(a, b, c):
+        for i in xrange(10):
+            c[:, i] = a[i, :]
+    hfkt = hope.jit(fkt)
+    (ao, ah), (bo, bh), (co, ch) = random(dtype, [10, 10]), random(dtype, [10, 10]), random(dtype, [10, 10])
+    ao, ah, bo, bh = (ao / 2.).astype(dtype), (ah / 2.).astype(dtype), (bo / 2.).astype(dtype), (bh / 2.).astype(dtype)
+    fkt(ao, bo, co), hfkt(ah, bh, ch)
+    assert check(co, ch)
+    fkt(ao, bo, co), hfkt(ah, bh, ch)
+    assert check(co, ch)
+
