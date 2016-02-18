@@ -99,3 +99,16 @@ def test_merged_slice(dtype):
     fkt(ao, bo, co), hfkt(ah, bh, ch)
     assert check(co, ch)
 
+@pytest.mark.parametrize("dtype", dtypes)
+def test_merged_slice_2(dtype):
+    def fkt(a, c):
+        a[1:] = c[:-1] + c[1:]
+        c[:] = a
+    hfkt = hope.jit(fkt)
+    (ao, ah), (co, ch) = random(dtype, [5]), random(dtype, [5])
+    ao, ah = (ao / 2.).astype(dtype), (ah / 2.).astype(dtype)
+    co, ch = (co / 2.).astype(dtype), (ch / 2.).astype(dtype)
+    fkt(ao, co), hfkt(ah, ch)
+    assert check(co, ch)
+    fkt(ao, co), hfkt(ah, ch)
+    assert check(co, ch)
