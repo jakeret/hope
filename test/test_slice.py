@@ -106,8 +106,8 @@ def test_merged_slice_2(dtype):
         c[:] = a
     hfkt = hope.jit(fkt)
     (ao, ah), (co, ch) = random(dtype, [5]), random(dtype, [5])
-    ao, ah = (ao / 2.).astype(dtype), (ah / 2.).astype(dtype)
-    co, ch = (co / 2.).astype(dtype), (ch / 2.).astype(dtype)
+    ao, ah = (ao / 4.).astype(dtype), (ah / 4.).astype(dtype)
+    co, ch = (co / 4.).astype(dtype), (ch / 4.).astype(dtype)
     fkt(ao, co), hfkt(ah, ch)
     assert check(co, ch)
     fkt(ao, co), hfkt(ah, ch)
