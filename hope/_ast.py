@@ -105,6 +105,13 @@ class ObjectAttr(Token):
     def __eq__(self, other):
         return isinstance(other, ObjectAttr) and self.parent == other.parent and self.name == other.name and self.dtype == other.dtype and self.shape == other.shape and self.char == other.char
 
+    def getTrace(self):
+        parent = self.parent
+        trace = [self.name]
+        while not parent is None:
+            trace.insert(0, parent.name)
+            parent = parent.parent
+        return trace
 
 class Dimension(Token):
     def __init__(self, variable, dim):
@@ -347,6 +354,12 @@ class Block(Token):
     def __init__(self, expr):
         self.body, self.shape, self.merged = [expr], expr.shape, None
 
+class Reference(Token):
+    def __init__(self, target, value):
+        self.target, self.value, self.dtype, self.shape = target, value, target.dtype, []
+
+    def __eq__(self, other):
+        return isinstance(other, Reference) and self.target == other.target and self.value == other.value
 
 class Body(Token):
     def __init__(self, blocks):

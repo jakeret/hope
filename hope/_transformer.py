@@ -35,6 +35,10 @@ class SymbolNamesCollector(NodeVisitor):
     def visit_ObjectAttr(self, node):
         return []
     def visit_Dimension(self, node):
+        if isinstance(node.variable, ObjectAttr):
+            trace = node.variable.getTrace()
+            return [".".join(trace)]
+        
         return [node.variable.name]
     def visit_DimensionSlice(self, node):
         return self.visit_Dimension(node)
@@ -47,6 +51,8 @@ class SymbolNamesCollector(NodeVisitor):
     def visit_Expr(self, node):
         return self.visit(node.value)
     def visit_Assign(self, node):
+        return list(set(self.visit(node.target) + self.visit(node.value)))
+    def visit_Reference(self, node):
         return list(set(self.visit(node.target) + self.visit(node.value)))
     def visit_AugAssign(self, node):
         return list(set(self.visit(node.target) + self.visit(node.value)))
@@ -285,6 +291,13 @@ class ASTTransformer(ast.NodeVisitor):
             if isinstance(target, NewVariable):
                 self.variables[target.name] = Variable(target.name, copy.deepcopy(value.shape), value.dtype)
                 target = self.variables[target.name]
+            if isinstance(value, ObjectAttr):
+                self.variables[".".join(value.getTrace())] = Variable(".".join(value.getTrace()), copy.deepcopy(value.shape), value.dtype, scope="body")
+#                 segstrs = ["{0}:{1}".format("" if seg[0] is None else self.dumper.visit(seg[0]), self.dumper.visit(seg[1])) for seg in target.shape]
+#                 for segstr in segstrs:
+#                     if not segstr in self.merged:
+#                         self.merged[segstr] = len(self.merged)
+#                 self.variables[target.name].scope = "body"
             elif isinstance(target, Variable) and len(target.shape) == 0: pass
             elif not isinstance(target, View):
                 raise Exception("Assignments are only allowed to views")
@@ -296,6 +309,10 @@ class ASTTransformer(ast.NodeVisitor):
             
             else:
                 self.merge_shapes(target, value)
+                
+#             if isinstance(value, ObjectAttr):
+#                 return Reference(target, value)
+                
             return Assign(target, value)
         except Exception as ex:
             from hope._tosource import tosource
