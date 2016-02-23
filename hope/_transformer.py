@@ -305,13 +305,10 @@ class ASTTransformer(ast.NodeVisitor):
                 self.merge_shapes(target, value)
                 
 
-            if isinstance(value, ObjectAttr) and not isinstance(target, View):
-                self.variables[".".join(value.getTrace())] = Variable(".".join(value.getTrace()), 
-                                                                      shape=copy.deepcopy(value.shape), 
-                                                                      dtype=value.dtype, 
-                                                                      scope="body")
-                if not isinstance(target, ObjectAttr):
-                    # avoid that target is allocated
+            if isinstance(value, ObjectAttr) and not isinstance(target, View): # reference to member
+                name = ".".join(value.getTrace())
+                self.variables[name] = Variable(name, shape=copy.deepcopy(value.shape), dtype=value.dtype, scope="body")
+                if not isinstance(target, ObjectAttr): # avoid that target is allocated
                     self.variables[target.name].scope = "body"
                     self.variables[target.name].allocated = True
                 

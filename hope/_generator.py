@@ -49,11 +49,7 @@ class CPPGenerator(NodeVisitor):
             return "c{0}[{1}]".format(node.name, self.getVariableExtent(node));
 
     def visit_ObjectAttr(self, node):
-        parent = node.parent
-        trace = [node.name]
-        while not parent is None:
-            trace.insert(0, parent.name)
-            parent = parent.parent
+        trace = node.getTrace()
         if len(node.shape) == 0:
             return "c" + ".c".join(trace)
         else:
@@ -149,16 +145,16 @@ class CPPGenerator(NodeVisitor):
             return "{0} = {1};".format(self.visit(node.target), self.visit(node.value))
 
     def visit_Reference(self, node):
-        variable = node.target
+        target = node.target
         trace = node.value.getTrace()
-        if isinstance(variable, ObjectAttr):
-            return "c{0} = c{1};".format(".c".join(variable.getTrace()), ".c".join(trace))
-        if len(variable.shape) == 0:
-            return "{0} c{1} = c{2};".format(PY_C_TYPE[variable.dtype], variable.name, ".c".join(trace))
-        else:
-            return "PyObject * p{0} = (PyObject *)PyArray_GETCONTIGUOUS((PyArrayObject *)c{1});\n".format(variable.name, ".p".join(trace)) \
-                +  "npy_intp * s{0} = c{1};\n".format(variable.name, ".s".join(trace)) \
-                +  "{0} * c{1} = c{2};".format(PY_C_TYPE[variable.dtype], variable.name, ".c".join(trace))
+        if isinstance(target, ObjectAttr): # self.x = self.y
+            return "c{0} = c{1};".format(".c".join(target.getTrace()), ".c".join(trace))
+        if len(target.shape) == 0: # [int] x = self.y
+            return "{0} c{1} = c{2};".format(PY_C_TYPE[target.dtype], target.name, ".c".join(trace))
+        else: # [array] x = self.y
+            return "PyObject * p{0} = (PyObject *)PyArray_GETCONTIGUOUS((PyArrayObject *)c{1});\n".format(target.name, ".p".join(trace)) \
+                +  "npy_intp * s{0} = c{1};\n".format(target.name, ".s".join(trace)) \
+                +  "{0} * c{1} = c{2};".format(PY_C_TYPE[target.dtype], target.name, ".c".join(trace))
 
     def visit_AugAssign(self, node):
         if node.op == "**=":
