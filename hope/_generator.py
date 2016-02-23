@@ -91,6 +91,8 @@ class CPPGenerator(NodeVisitor):
                 extent_ind += 1
             else:
                 seg = self.visit(extent)
+                if isinstance(extent, Number) and extent.value < 0:
+                    seg = "{0}+{1}".format(self.visit_Dimension(segment[1]), seg)
                 segstr = self.dumper.visit(extent)
             if config.rangecheck:
                 subscript += "native_rangecheck({0}".format(seg)
