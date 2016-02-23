@@ -71,6 +71,53 @@ def test_cls_4():
     inst = Cls()
     assert check(inst.fkt_4(), inst.obj.i)
 
+def test_member_reference_array():
+    class Test(object):
+        def __init__(self, n=10):
+            self.member = np.ones(n)
+
+        def fkt(self):
+            arr = self.member
+            return arr
+    
+        hfkt = hope.jit(fkt)
+            
+    t1 = Test()
+    arr1 = t1.fkt()
+    arr2 = t1.hfkt()
+    assert np.all(arr1 == arr2)
+
+def test_member_reference_scalar():
+    class Test(object):
+        def __init__(self, n=10):
+            self.member = n
+
+        def fkt(self):
+            arr = self.member
+            return arr
+    
+        hfkt = hope.jit(fkt)
+            
+    t1 = Test()
+    arr1 = t1.fkt()
+    arr2 = t1.hfkt()
+    assert np.all(arr1 == arr2)
+
+def test_member_reference_view():
+    class Test(object):
+        def __init__(self, n=10):
+            self.member = np.ones(n)
+            self.out = np.empty(n)
+
+        def fkt(self):
+            self.out[:] = self.member
+    
+        hfkt = hope.jit(fkt)
+            
+    t1 = Test()
+    t1.fkt()
+    assert np.all(t1.member == t1.out)
+
 
 if __name__ == '__main__':
     test_cls_1()

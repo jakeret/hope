@@ -291,16 +291,9 @@ class ASTTransformer(ast.NodeVisitor):
             if isinstance(target, NewVariable):
                 self.variables[target.name] = Variable(target.name, copy.deepcopy(value.shape), value.dtype)
                 target = self.variables[target.name]
-            if isinstance(value, ObjectAttr):
-                self.variables[".".join(value.getTrace())] = Variable(".".join(value.getTrace()), copy.deepcopy(value.shape), value.dtype, scope="body")
-#                 segstrs = ["{0}:{1}".format("" if seg[0] is None else self.dumper.visit(seg[0]), self.dumper.visit(seg[1])) for seg in target.shape]
-#                 for segstr in segstrs:
-#                     if not segstr in self.merged:
-#                         self.merged[segstr] = len(self.merged)
-#                 self.variables[target.name].scope = "body"
             elif isinstance(target, Variable) and len(target.shape) == 0: pass
             elif not isinstance(target, View):
-                raise Exception("Assignments are only allowed to views")
+                raise Exception("Assignments are only allowed to views or variables")
             
             # TODO: should we check dtypes?
             if len(target.shape) > 0 and len(value.shape) == 0: pass
@@ -310,10 +303,20 @@ class ASTTransformer(ast.NodeVisitor):
             else:
                 self.merge_shapes(target, value)
                 
-#             if isinstance(value, ObjectAttr):
-#                 return Reference(target, value)
+
+            if isinstance(value, ObjectAttr) and not isinstance(target, View):
+                self.variables[".".join(value.getTrace())] = Variable(".".join(value.getTrace()), 
+                                                                      shape=copy.deepcopy(value.shape), 
+                                                                      dtype=value.dtype, 
+                                                                      scope="body")
+                # avoid that target is allocated
+                self.variables[target.name].scope = "body"
+                self.variables[target.name].allocated = True
+                
+                return Reference(target, value)
                 
             return Assign(target, value)
+        
         except Exception as ex:
             from hope._tosource import tosource
             ex.args = ((ex.args[0] if ex.args else "") + "\nin line " + tosource(node),) + ex.args[1:]
