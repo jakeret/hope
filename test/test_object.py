@@ -118,6 +118,21 @@ def test_member_reference_view():
     t1.fkt()
     assert np.all(t1.member == t1.out)
 
+def test_member_reference_member():
+    class Test(object):
+        def __init__(self, n=10):
+            self.member = np.ones(n)
+            self.out = np.empty(n)
+
+        def fkt(self):
+            self.out = self.member
+    
+        hfkt = hope.jit(fkt)
+            
+    t1 = Test()
+    t1.fkt()
+    assert np.all(t1.member == t1.out)
+
 
 if __name__ == '__main__':
     test_cls_1()

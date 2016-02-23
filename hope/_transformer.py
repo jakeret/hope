@@ -292,6 +292,7 @@ class ASTTransformer(ast.NodeVisitor):
                 self.variables[target.name] = Variable(target.name, copy.deepcopy(value.shape), value.dtype)
                 target = self.variables[target.name]
             elif isinstance(target, Variable) and len(target.shape) == 0: pass
+            elif isinstance(target, ObjectAttr): pass
             elif not isinstance(target, View):
                 raise Exception("Assignments are only allowed to views or variables")
             
@@ -309,9 +310,10 @@ class ASTTransformer(ast.NodeVisitor):
                                                                       shape=copy.deepcopy(value.shape), 
                                                                       dtype=value.dtype, 
                                                                       scope="body")
-                # avoid that target is allocated
-                self.variables[target.name].scope = "body"
-                self.variables[target.name].allocated = True
+                if not isinstance(target, ObjectAttr):
+                    # avoid that target is allocated
+                    self.variables[target.name].scope = "body"
+                    self.variables[target.name].allocated = True
                 
                 return Reference(target, value)
                 
@@ -462,7 +464,7 @@ class ASTTransformer(ast.NodeVisitor):
                 return Number(np.pi)
             else:
                 return NumpyAttr(node.attr)
-        elif isinstance(node.ctx, ast.Load) and isinstance(node.value, ast.Name) and isinstance(node.value.ctx, ast.Load) \
+        elif (isinstance(node.ctx, ast.Load) or isinstance(node.ctx, ast.Store)) and isinstance(node.value, ast.Name) and isinstance(node.value.ctx, ast.Load) \
                 and node.value.id in self.variables and isinstance(self.variables[node.value.id], Object) \
                 and (node.attr in self.variables[node.value.id].attrs or hasattr(self.variables[node.value.id].instance, node.attr)):
             return self.variables[node.value.id].getAttr(node.attr)

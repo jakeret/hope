@@ -151,16 +151,11 @@ class CPPGenerator(NodeVisitor):
     def visit_Reference(self, node):
         variable = node.target
         trace = node.value.getTrace()
+        if isinstance(variable, ObjectAttr):
+            return "c{0} = c{1};".format(".c".join(variable.getTrace()), ".c".join(trace))
         if len(variable.shape) == 0:
             return "{0} c{1} = c{2};".format(PY_C_TYPE[variable.dtype], variable.name, ".c".join(trace))
         else:
-            shape = []
-            
-            for segment in variable.shape:
-                if not segment[0] is None:
-                    raise Exception("Allocate need to have (:len)* in shape: {0}".format(",".join([str(sgment) for sgment in variable.shape])))
-                shape.append(self.visit(segment[1]))
-            
             return "PyObject * p{0} = (PyObject *)PyArray_GETCONTIGUOUS((PyArrayObject *)c{1});\n".format(variable.name, ".p".join(trace)) \
                 +  "npy_intp * s{0} = c{1};\n".format(variable.name, ".s".join(trace)) \
                 +  "{0} * c{1} = c{2};".format(PY_C_TYPE[variable.dtype], variable.name, ".c".join(trace))
