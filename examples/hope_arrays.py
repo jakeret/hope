@@ -43,6 +43,8 @@ def array_slicing_2D(a):
     a[:, 1:] = 2
     a[2:, 2:] = 4
     a[3, 3] = 5
+    a[1, :-2] = 6
+    a[:-2, 1] = 7
     return a
 
 @hope.jit
@@ -63,7 +65,7 @@ def example():
     a = np.zeros((4,4))
     r = array_slicing_2D(a)
     print(r)
-    assert np.sum(r) == 39
+    assert np.sum(r) == 54
     
     #assign a slice of an array to a slice
     a = np.zeros(4)

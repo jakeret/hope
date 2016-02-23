@@ -3,6 +3,14 @@
 History
 -------
 
+0.x.x (2016-0x-xx)
+++++++++++++++++++
+
+* Fixed bug in 2d array slicing
+* Array slicing with negative index
+* Fixed name clash bug with object attributes
+* Replaced assignment with reference to object attributes 
+
 0.5.0 (2016-01-20)
 ++++++++++++++++++
 
