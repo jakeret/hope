@@ -83,9 +83,10 @@ def test_member_reference_array():
         hfkt = hope.jit(fkt)
             
     t1 = Test()
-    arr1 = t1.fkt()
-    arr2 = t1.hfkt()
-    assert np.all(arr1 == arr2)
+    arr = t1.fkt()
+    harr = t1.hfkt()
+    assert np.all(arr == harr)
+    assert t1.member is harr
 
 def test_member_reference_scalar():
     class Test(object):
@@ -93,15 +94,15 @@ def test_member_reference_scalar():
             self.member = n
 
         def fkt(self):
-            arr = self.member
-            return arr
+            a = self.member
+            return a
     
         hfkt = hope.jit(fkt)
             
     t1 = Test()
-    arr1 = t1.fkt()
-    arr2 = t1.hfkt()
-    assert np.all(arr1 == arr2)
+    a = t1.fkt()
+    ha = t1.hfkt()
+    assert a == ha
 
 def test_member_reference_view():
     class Test(object):
@@ -116,6 +117,7 @@ def test_member_reference_view():
             
     t1 = Test()
     t1.fkt()
+    assert t1.member is not t1.out
     assert np.all(t1.member == t1.out)
 
 def test_member_reference_member():
@@ -131,7 +133,7 @@ def test_member_reference_member():
             
     t1 = Test()
     t1.fkt()
-    assert np.all(t1.member == t1.out)
+    assert t1.member is t1.out
 
 
 if __name__ == '__main__':
