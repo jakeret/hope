@@ -35,7 +35,13 @@ class SymbolNamesCollector(NodeVisitor):
     def visit_ObjectAttr(self, node):
         return []
     def visit_Dimension(self, node):
+        if isinstance(node.variable, ObjectAttr):
+            trace = node.variable.getTrace()
+            return [".".join(trace)]
+        
         return [node.variable.name]
+    def visit_DimensionSlice(self, node):
+        return self.visit_Dimension(node)
     def visit_View(self, node):
         symbols = self.visit(node.variable)
         for upper, lower in node.shape:
@@ -45,6 +51,8 @@ class SymbolNamesCollector(NodeVisitor):
     def visit_Expr(self, node):
         return self.visit(node.value)
     def visit_Assign(self, node):
+        return list(set(self.visit(node.target) + self.visit(node.value)))
+    def visit_Reference(self, node):
         return list(set(self.visit(node.target) + self.visit(node.value)))
     def visit_AugAssign(self, node):
         return list(set(self.visit(node.target) + self.visit(node.value)))
@@ -284,8 +292,9 @@ class ASTTransformer(ast.NodeVisitor):
                 self.variables[target.name] = Variable(target.name, copy.deepcopy(value.shape), value.dtype)
                 target = self.variables[target.name]
             elif isinstance(target, Variable) and len(target.shape) == 0: pass
+            elif isinstance(target, ObjectAttr): pass
             elif not isinstance(target, View):
-                raise Exception("Assignments are only allowed to views")
+                raise Exception("Assignments are only allowed to views or variables")
             
             # TODO: should we check dtypes?
             if len(target.shape) > 0 and len(value.shape) == 0: pass
@@ -294,7 +303,19 @@ class ASTTransformer(ast.NodeVisitor):
             
             else:
                 self.merge_shapes(target, value)
+                
+
+            if isinstance(value, ObjectAttr) and not isinstance(target, View): # reference to member
+                name = ".".join(value.getTrace())
+                self.variables[name] = Variable(name, shape=copy.deepcopy(value.shape), dtype=value.dtype, scope="body")
+                if not isinstance(target, ObjectAttr): # avoid that target is allocated
+                    self.variables[target.name].scope = "body"
+                    self.variables[target.name].allocated = True
+                
+                return Reference(target, value)
+                
             return Assign(target, value)
+        
         except Exception as ex:
             from hope._tosource import tosource
             ex.args = ((ex.args[0] if ex.args else "") + "\nin line " + tosource(node),) + ex.args[1:]
@@ -320,7 +341,12 @@ class ASTTransformer(ast.NodeVisitor):
         return View(self.visit(node.value), self.visit(node.slice))
 
     def visit_UnaryOp(self, node):
-        return UnaryOp(type(node.op).__name__, self.visit(node.operand))
+        op = type(node.op).__name__
+        operand = self.visit(node.operand)
+        if isinstance(operand, Number):
+            opname, _ = UNARY_OPERATORS[op]
+            return operand if opname == "+" else Number(-operand.value)
+        return UnaryOp(op, operand)
 
     def visit_BinOp(self, node):
         left, right = self.visit(node.left), self.visit(node.right)
@@ -377,6 +403,10 @@ class ASTTransformer(ast.NodeVisitor):
             raise Exception("Step size other than 1 are not supported")
         lower = node.lower if node.lower is None else self.visit(node.lower)
         upper = node.upper if node.upper is None else self.visit(node.upper)
+        if isinstance(lower, Number) and lower.value < 0:
+            raise UnsupportedFeatureException("Negative slices not supported")
+#         if isinstance(upper, Number) and upper.value < 0:
+#             raise UnsupportedFeatureException("Negative slices not supported")
         return [(lower, upper)]
 
     def visit_ExtSlice(self, node):
@@ -431,7 +461,7 @@ class ASTTransformer(ast.NodeVisitor):
                 return Number(np.pi)
             else:
                 return NumpyAttr(node.attr)
-        elif isinstance(node.ctx, ast.Load) and isinstance(node.value, ast.Name) and isinstance(node.value.ctx, ast.Load) \
+        elif (isinstance(node.ctx, ast.Load) or isinstance(node.ctx, ast.Store)) and isinstance(node.value, ast.Name) and isinstance(node.value.ctx, ast.Load) \
                 and node.value.id in self.variables and isinstance(self.variables[node.value.id], Object) \
                 and (node.attr in self.variables[node.value.id].attrs or hasattr(self.variables[node.value.id].instance, node.attr)):
             return self.variables[node.value.id].getAttr(node.attr)

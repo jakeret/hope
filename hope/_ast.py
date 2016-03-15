@@ -105,6 +105,13 @@ class ObjectAttr(Token):
     def __eq__(self, other):
         return isinstance(other, ObjectAttr) and self.parent == other.parent and self.name == other.name and self.dtype == other.dtype and self.shape == other.shape and self.char == other.char
 
+    def getTrace(self):
+        parent = self.parent
+        trace = [self.name]
+        while not parent is None:
+            trace.insert(0, parent.name)
+            parent = parent.parent
+        return trace
 
 class Dimension(Token):
     def __init__(self, variable, dim):
@@ -115,6 +122,10 @@ class Dimension(Token):
             and isinstance(self.variable, Variable) and self.variable.name == other.variable.name and self.variable.dtype == other.variable.dtype \
             and len(self.variable.shape) == len(other.variable.shape) and self.variable.scope == other.variable.scope
 
+class DimensionSlice(Dimension):
+    def __init__(self, variable, dim, slice):
+        super(DimensionSlice, self).__init__(variable, dim)
+        self.slice = slice
 
 class View(Token):
     def __init__(self, variable, extents):
@@ -127,13 +138,16 @@ class View(Token):
         if len(variable.shape) != len(extents):
             raise Exception("Extends of variable and subscript do not match")
         self.variable, self.dtype, self.extents, self.shape = variable, variable.dtype, extents, []
-        for variable_extent, extent in zip(self.variable.shape, extents):
+        for ind, (variable_extent, extent) in enumerate(zip(self.variable.shape, extents[:])):
             # TODO: check if variable extends and extends do match
             if isinstance(extent, tuple):
                 lower, upper = extent
                 if lower is None: lower = variable_extent[0]
                 if isinstance(lower, Number) and lower.value == 0: lower = None
                 if upper is None: upper = variable_extent[1]
+                if isinstance(upper, Number) and upper.value < 0: 
+                    upper = DimensionSlice(variable, variable_extent[1].dim, upper)
+                    extents[ind] = (lower, copy.deepcopy(upper))
                 self.shape.append((lower, upper))
 
     def __eq__(self, other):
@@ -340,6 +354,12 @@ class Block(Token):
     def __init__(self, expr):
         self.body, self.shape, self.merged = [expr], expr.shape, None
 
+class Reference(Token):
+    def __init__(self, target, value):
+        self.target, self.value, self.dtype, self.shape = target, value, target.dtype, []
+
+    def __eq__(self, other):
+        return isinstance(other, Reference) and self.target == other.target and self.value == other.value
 
 class Body(Token):
     def __init__(self, blocks):

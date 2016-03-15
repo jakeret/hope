@@ -71,6 +71,70 @@ def test_cls_4():
     inst = Cls()
     assert check(inst.fkt_4(), inst.obj.i)
 
+def test_member_reference_array():
+    class Test(object):
+        def __init__(self, n=10):
+            self.member = np.ones(n)
+
+        def fkt(self):
+            arr = self.member
+            return arr
+    
+        hfkt = hope.jit(fkt)
+            
+    t1 = Test()
+    arr = t1.fkt()
+    harr = t1.hfkt()
+    assert np.all(arr == harr)
+    assert t1.member is harr
+
+def test_member_reference_scalar():
+    class Test(object):
+        def __init__(self, n=10):
+            self.member = n
+
+        def fkt(self):
+            a = self.member
+            return a
+    
+        hfkt = hope.jit(fkt)
+            
+    t1 = Test()
+    a = t1.fkt()
+    ha = t1.hfkt()
+    assert a == ha
+
+def test_member_reference_view():
+    class Test(object):
+        def __init__(self, n=10):
+            self.member = np.ones(n)
+            self.out = np.empty(n)
+
+        def fkt(self):
+            self.out[:] = self.member
+    
+        hfkt = hope.jit(fkt)
+            
+    t1 = Test()
+    t1.fkt()
+    assert t1.member is not t1.out
+    assert np.all(t1.member == t1.out)
+
+def test_member_reference_member():
+    class Test(object):
+        def __init__(self, n=10):
+            self.member = np.ones(n)
+            self.out = np.empty(n)
+
+        def fkt(self):
+            self.out = self.member
+    
+        hfkt = hope.jit(fkt)
+            
+    t1 = Test()
+    t1.fkt()
+    assert t1.member is t1.out
+
 
 if __name__ == '__main__':
     test_cls_1()
