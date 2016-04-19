@@ -3,7 +3,7 @@
 History
 -------
 
-0.x.x (2016-0x-xx)
+0.6.0 (2016-04-19)
 ++++++++++++++++++
 
 * Fixed bug in 2d array slicing
