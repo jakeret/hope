@@ -8,7 +8,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 import hope
 import numpy as np
 
-from test.utilities import check
+from test.utilities import check,setup_module,setup_method,teardown_module
 
 
 class SubCls(object):
@@ -116,7 +116,7 @@ def test_member_reference_view():
         hfkt = hope.jit(fkt)
             
     t1 = Test()
-    t1.fkt()
+    t1.hfkt()
     assert t1.member is not t1.out
     assert np.all(t1.member == t1.out)
 
@@ -135,9 +135,17 @@ def test_member_reference_member():
     t1.fkt()
     assert t1.member is t1.out
 
+def test_member_operation():
+    class Test(object):
+        def __init__(self):
+            self.member = np.ones(3)
 
-if __name__ == '__main__':
-    test_cls_1()
-    test_cls_2()
-    # test_cls_3()
-    test_cls_4()
+        def fkt(self):
+            return self.member + 1.0
+    
+        hfkt = hope.jit(fkt)
+            
+    t1 = Test()
+    a = t1.fkt()
+    ah = t1.hfkt()
+    assert np.all(a==ah)

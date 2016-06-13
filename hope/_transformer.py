@@ -36,9 +36,7 @@ class SymbolNamesCollector(NodeVisitor):
         return []
     def visit_Dimension(self, node):
         if isinstance(node.variable, ObjectAttr):
-            trace = node.variable.getTrace()
-            return [".".join(trace)]
-        
+            return []
         return [node.variable.name]
     def visit_DimensionSlice(self, node):
         return self.visit_Dimension(node)
