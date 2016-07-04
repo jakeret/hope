@@ -2,6 +2,10 @@
 
 History
 -------
+0.6.1 (2016-07-04)
+++++++++++++++++++
+
+* fixing bug when accessing class members for operations
 
 0.6.0 (2016-04-19)
 ++++++++++++++++++
