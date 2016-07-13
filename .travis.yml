@@ -2,7 +2,6 @@
 language: python
 python:
 - "3.4"
-- "3.3"
 - "2.7"
 
 # install gcc 4.8 for cxx11
