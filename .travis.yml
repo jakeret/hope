@@ -4,6 +4,9 @@ python:
 - "3.4"
 - "3.3"
 - "2.7"
+matrix:
+  allow_failures:
+    - python: 3.3
 
 # install gcc 4.8 for cxx11
 before_install:
