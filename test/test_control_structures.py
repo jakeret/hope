@@ -44,11 +44,10 @@ def test_for_range_1(dtype):
     ro, rh = fkt(ao, bo, co), hfkt(ah, bh, ch)
     assert check(co, ch)
 
-@pytest.mark.skipif("sys.version_info[0] > 2")
 @pytest.mark.parametrize("dtype", dtypes)
 def test_for_xrange_1(dtype):
     def fkt(a, b, c):
-        for i in xrange(10):
+        for i in range(10):
             c[:, i] = a[i, :]
             c[i, 1] = a[0, 1] + b[i, 5]
     hfkt = hope.jit(fkt)
