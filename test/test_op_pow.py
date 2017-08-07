@@ -16,10 +16,10 @@ def test_augmented_pow(dtype, shape):
         c[:] **= a
     hfkt = hope.jit(fkt)
     (ao, ah), (co, ch) = random(np.uint8, shape), random(dtype, shape)
-    if np.count_nonzero(ao == 0) > 0: ao[ao == 0] += 1
-    if np.count_nonzero(ah == 0) > 0: ah[ah == 0] += 1
-    if np.count_nonzero(co == 0) > 0: co[co == 0] += 1
-    if np.count_nonzero(ch == 0) > 0: ch[ch == 0] += 1
+    ao[ao == 0] += 1
+    ah[ah == 0] += 1
+    co[co == 0] += 1
+    ch[ch == 0] += 1
     co, ch = np.copysign(np.sqrt(np.abs(co)), co).astype(dtype), np.copysign(np.sqrt(np.abs(ch)), ch).astype(dtype)
     ao, ah = np.power(np.abs(ao).astype(np.float64), 1. / co.astype(np.float64)).astype(dtype), np.power(np.abs(ah).astype(np.float64), 1. / ch.astype(np.float64)).astype(dtype)
     fkt(ao, co),  hfkt(ah, ch)
