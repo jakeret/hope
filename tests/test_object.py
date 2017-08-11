@@ -8,7 +8,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 import hope
 import numpy as np
 
-from test.utilities import check,setup_module,setup_method,teardown_module
+from .utilities import check,setup_module,setup_method,teardown_module
 
 
 class SubCls(object):

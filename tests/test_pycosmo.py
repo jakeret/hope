@@ -8,7 +8,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 import numpy as np
 import hope, sysconfig, sys, os
 
-from test.utilities import random, check, make_test, setup_module, setup_method, teardown_module
+from .utilities import random, check, make_test, setup_module, setup_method, teardown_module
 
 def test_pycosmo_1():
     def fkt_pycosmo(y, lna, k, eta, hubble_a, tdot, omega_gam, omega_neu, omega_dm_0, omega_b_0, ha, rh, r_bph_a, xc_damp):

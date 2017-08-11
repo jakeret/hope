@@ -9,7 +9,7 @@ import hope
 import itertools
 import pytest
 
-from test.utilities import random, check, make_test, JENKINS, min_dtypes, dtypes, shapes, setup_module, setup_method, teardown_module
+from .utilities import random, check, make_test, JENKINS, min_dtypes, dtypes, shapes, setup_module, setup_method, teardown_module
 
 def fkt_call_local_fun_callback(a, b):
     a[:] = b

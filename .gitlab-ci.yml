@@ -1,0 +1,30 @@
+tests:
+    tags:
+        - python
+    script:
+        - pyenv versions
+        - pyenv local 2.7 3.4 3.5 3.6
+        - tox -r -vv -i https://cosmo-pypi.phys.ethz.ch/simple
+
+style:
+    tags:
+        - python
+    script:
+        - pyenv local 2.7 3.4 3.5 3.6
+        - tox -e style -i https://cosmo-pypi.phys.ethz.ch/simple
+    allow_failure: true
+
+docs:
+    tags:
+        - python
+    script:
+        - pyenv local 2.7 3.4 3.5 3.6
+        - tox -e docs -i https://cosmo-pypi.phys.ethz.ch/simple
+
+publish_docs:
+    tags:
+        - python
+    script:
+        - pyenv local 2.7 3.4 3.5 3.6
+        - tox -e publish_docs -i https://cosmo-pypi.phys.ethz.ch/simple
+    when: manual

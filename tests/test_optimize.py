@@ -8,7 +8,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 import numpy as np
 import hope, itertools, pytest, sys, sysconfig, os, shutil
 
-from test.utilities import random, check, make_test, JENKINS, min_dtypes, dtypes, shapes, setup_module, setup_method, teardown_module
+from .utilities import random, check, make_test, JENKINS, min_dtypes, dtypes, shapes, setup_module, setup_method, teardown_module
 
 @pytest.mark.parametrize("dtype,shape", itertools.product(dtypes, shapes[1:]))
 def test_opt_pow_array(dtype, shape):

@@ -9,7 +9,7 @@ import hope
 import itertools
 import pytest
 
-from test.utilities import random, check, make_test, JENKINS, min_dtypes, dtypes, shapes, setup_module, setup_method, teardown_module
+from .utilities import random, check, make_test, JENKINS, min_dtypes, dtypes, shapes, setup_module, setup_method, teardown_module
 
 @pytest.mark.parametrize("dtype", dtypes)
 def test_blocks_1(dtype):
