@@ -10,7 +10,7 @@ import itertools
 import pytest
 import copy
 
-from test.utilities import random, check, make_test, dtypes, shapes
+from .utilities import random, check, make_test, dtypes, shapes
 
 import hope
 from hope.exceptions import UnsupportedFeatureException

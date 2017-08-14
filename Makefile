@@ -28,7 +28,7 @@ lint:
 	flake8 hope test
 
 test:
-	py.test -v -s
+	py.test -v -s tests
 
 test-all:
 	tox

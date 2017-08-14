@@ -11,7 +11,7 @@ import hope
 import pytest
 import numpy as np
 
-from test.utilities import setup_module, setup_method, teardown_module
+from .utilities import setup_module, setup_method, teardown_module
 from hope.exceptions import UnsupportedFeatureException
 
 def test_negative_idx_1d():
