@@ -12,7 +12,7 @@ from .utilities import random, check, make_test, JENKINS, min_dtypes, dtypes, sh
 
 @pytest.mark.parametrize("dtype,shape", itertools.product(dtypes, shapes[1:]))
 def test_augmented_pow(dtype, shape):
-    def fkt(a, c): 
+    def fkt(a, c):
         c[:] **= a
     hfkt = hope.jit(fkt)
     (ao, ah), (co, ch) = random(np.uint8, shape), random(dtype, shape)
@@ -22,7 +22,7 @@ def test_augmented_pow(dtype, shape):
     ch[ch == 0] += 1
     co, ch = np.copysign(np.sqrt(np.abs(co)), co).astype(dtype), np.copysign(np.sqrt(np.abs(ch)), ch).astype(dtype)
     ao, ah = np.power(np.abs(ao).astype(np.float64), 1. / co.astype(np.float64)).astype(dtype), np.power(np.abs(ah).astype(np.float64), 1. / ch.astype(np.float64)).astype(dtype)
-    fkt(ao, co),  hfkt(ah, ch)
+    fkt(np.abs(ao), co),  hfkt(np.abs(ah), ch)
     assert check(co, ch)
 
 # TODO: fix for np.ulonglong and uint64, std::power produce different results
