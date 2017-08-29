@@ -179,6 +179,8 @@ class IterableFunctionVisitor(ast.NodeVisitor):
         return True
     def visit_Name(self, node):
         return True
+    def visit_NameConstant(self, node):
+        return True
     def visit_Slice(self, node):
         return node.lower if node.lower is None else self.visit(node.lower) and node.upper if node.upper is None else self.visit(node.upper)
     def visit_ExtSlice(self, node):
