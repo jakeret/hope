@@ -82,18 +82,18 @@ def test_for_iteration_vars(dtype):
         n = 2
         for dx in range(2 * n + 1):
             b[n + 1:(size_x - n - 1)] += a[dx + 1:(size_x + dx - 2 * n - 1)]
-                
+
     hfkt = hope.jit(fkt)
     size_x = 10
     ao, ah = random(dtype, [size_x])
     ao = (ao / (2 * size_x + 1)).astype(dtype)
     ah = (ah / (2 * size_x + 1)).astype(dtype)
-    
+
     bo, bh = np.zeros((size_x), dtype), np.zeros((size_x), dtype)
-    
+
     fkt(ao, bo, size_x)
     hfkt(ah, bh, size_x)
-    
+
     assert check(bo, bh)
 
 
@@ -108,5 +108,23 @@ def test_while():
     hfkt = hope.jit(fkt)
     ro, rh = fkt(), hfkt()
     assert check(ro, rh)
+
+
+def test_if_const():
+    def fkt():
+        if True:
+            a = 1
+        else:
+            a = 2
+        if False:
+            b = 7
+        else:
+            b = 2
+        return a + b
+
+    hfkt = hope.jit(fkt)
+    ro, rh = fkt(), hfkt()
+    assert check(ro, rh)
+
 
 # TODO: make test for for/wile with array and for/else wihle/else
