@@ -51,3 +51,10 @@ htmlcov/
 /.cache/
 /.ipynb_checkpoints/
 /.settings/
+
+**/.*.sw?
+venv*
+sandbox
+
+**/.DS_Store
+.python-version
