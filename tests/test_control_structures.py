@@ -44,9 +44,10 @@ def test_for_range_1(dtype):
     ro, rh = fkt(ao, bo, co), hfkt(ah, bh, ch)
     assert check(co, ch)
 
-@pytest.mark.skipif("sys.version_info[0] > 2")
 @pytest.mark.parametrize("dtype", dtypes)
 def test_for_xrange_1(dtype):
+    if sys.version_info.major >= 3:
+        xrange = range
     def fkt(a, b, c):
         for i in xrange(10):
             c[:, i] = a[i, :]
