@@ -1,8 +1,0 @@
-running build_ext
-building 'pisum_opt_d21ddf605a07e3a4d8a460735cef49c69a69c967957f695741c0feae_0' extension
-C compiler: /usr/bin/clang -fno-strict-aliasing -Wsign-compare -Wunreachable-code -fno-common -dynamic -DNDEBUG -g -fwrapv -O3 -Wall -arch i386 -arch x86_64 -g
-
-compile options: '-I/Users/uweschmitt/Projects/hope/venv3/lib/python3.5/site-packages/numpy/core/include -I/Users/uweschmitt/Projects/hope/venv3/include -I/Library/Frameworks/Python.framework/Versions/3.5/include/python3.5m -c'
-extra options: '-Wall -Wno-unused-variable -march=native -stdlib=libc++ -std=c++11 -Wno-unreachable-code'
-clang: /var/folders/k8/zfp7dvcs1m326gz1brql1tv80000gn/T/hopehpwfl_f0/pisum_opt_d21ddf605a07e3a4d8a460735cef49c69a69c967957f695741c0feae_0.cpp
-/usr/bin/clang++ -bundle -undefined dynamic_lookup -arch i386 -arch x86_64 -g /var/folders/k8/zfp7dvcs1m326gz1brql1tv80000gn/T/hopehpwfl_f0/pisum_opt_d21ddf605a07e3a4d8a460735cef49c69a69c967957f695741c0feae_0.o -o /var/folders/k8/zfp7dvcs1m326gz1brql1tv80000gn/T/hopehpwfl_f0/pisum_opt_d21ddf605a07e3a4d8a460735cef49c69a69c967957f695741c0feae_0.cpython-35m-darwin.so
