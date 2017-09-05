@@ -6,9 +6,16 @@ Test control structures for `hope` module.
 from __future__ import print_function, division, absolute_import, unicode_literals
 
 import numpy as np
-import hope, itertools, pytest, sys, sysconfig, os, shutil
+import hope
+import itertools
+import pytest
+import sys
+import sysconfig
+import os
+import shutil
 
 from .utilities import random, check, make_test, JENKINS, min_dtypes, dtypes, shapes, setup_module, setup_method, teardown_module
+
 
 def test_ifelse_scalar():
     def fkt(a, b, c):
@@ -30,6 +37,7 @@ def test_ifelse_scalar():
 #     for aa in a:
 #         c[0] = a
 
+
 @pytest.mark.parametrize("dtype", dtypes)
 def test_for_range_1(dtype):
     def fkt(a, b, c):
@@ -37,28 +45,33 @@ def test_for_range_1(dtype):
             c[:, i] = a[i, :]
             c[i, 1] = a[0, 1] + b[i, 5]
     hfkt = hope.jit(fkt)
-    (ao, ah), (bo, bh), (co, ch) = random(dtype, [10, 10]), random(dtype, [10, 10]), random(dtype, [10, 10])
-    ao, ah, bo, bh = (ao / 2.).astype(dtype), (ah / 2.).astype(dtype), (bo / 2.).astype(dtype), (bh / 2.).astype(dtype)
+    (ao, ah), (bo, bh), (co, ch) = random(dtype, [10, 10]), random(
+        dtype, [10, 10]), random(dtype, [10, 10])
+    ao, ah, bo, bh = (ao / 2.).astype(dtype), (ah / 2.).astype(dtype), (bo /
+                                                                        2.).astype(dtype), (bh / 2.).astype(dtype)
     ro, rh = fkt(ao, bo, co), hfkt(ah, bh, ch)
     assert check(co, ch)
     ro, rh = fkt(ao, bo, co), hfkt(ah, bh, ch)
     assert check(co, ch)
 
+
+@pytest.mark.skipif(sys.version_info.major >= 3, reason="requires python2")
 @pytest.mark.parametrize("dtype", dtypes)
 def test_for_xrange_1(dtype):
-    if sys.version_info.major >= 3:
-        xrange = range
     def fkt(a, b, c):
         for i in xrange(10):
             c[:, i] = a[i, :]
             c[i, 1] = a[0, 1] + b[i, 5]
     hfkt = hope.jit(fkt)
-    (ao, ah), (bo, bh), (co, ch) = random(dtype, [10, 10]), random(dtype, [10, 10]), random(dtype, [10, 10])
-    ao, ah, bo, bh = (ao / 2.).astype(dtype), (ah / 2.).astype(dtype), (bo / 2.).astype(dtype), (bh / 2.).astype(dtype)
+    (ao, ah), (bo, bh), (co, ch) = random(dtype, [10, 10]), random(
+        dtype, [10, 10]), random(dtype, [10, 10])
+    ao, ah, bo, bh = (ao / 2.).astype(dtype), (ah / 2.).astype(dtype), (bo /
+                                                                        2.).astype(dtype), (bh / 2.).astype(dtype)
     ro, rh = fkt(ao, bo, co), hfkt(ah, bh, ch)
     assert check(co, ch)
     ro, rh = fkt(ao, bo, co), hfkt(ah, bh, ch)
     assert check(co, ch)
+
 
 @pytest.mark.parametrize("dtype", dtypes)
 def test_for_range_2(dtype):
@@ -67,11 +80,14 @@ def test_for_range_2(dtype):
             c[:, i] = a[i, :]
             c[i, 1] = a[0, 1] + b[i, 5]
     hfkt = hope.jit(fkt)
-    (ao, ah), (bo, bh), (co, ch) = random(dtype, [10, 10]), random(dtype, [10, 10]), random(dtype, [10, 10])
-    ao, ah, bo, bh = (ao / 2.).astype(dtype), (ah / 2.).astype(dtype), (bo / 2.).astype(dtype), (bh / 2.).astype(dtype)
+    (ao, ah), (bo, bh), (co, ch) = random(dtype, [10, 10]), random(
+        dtype, [10, 10]), random(dtype, [10, 10])
+    ao, ah, bo, bh = (ao / 2.).astype(dtype), (ah / 2.).astype(dtype), (bo /
+                                                                        2.).astype(dtype), (bh / 2.).astype(dtype)
     assert check(co, ch)
     ro, rh = fkt(ao, bo, co), hfkt(ah, bh, ch)
     assert check(co, ch)
+
 
 @pytest.mark.parametrize("dtype", dtypes)
 def test_for_iteration_vars(dtype):

@@ -1,3 +1,8 @@
+stages:
+    - style
+    - test_code
+    - test_docs
+
 tests:
     tags:
         - python
@@ -5,6 +10,7 @@ tests:
         - pyenv versions
         - pyenv local 2.7 3.4.6 3.5.3 3.6.2
         - tox -r -vv -i https://cosmo-pypi.phys.ethz.ch/simple
+    stage: test_code
 
 style:
     tags:
@@ -13,6 +19,8 @@ style:
         - pyenv local 2.7 3.4.6 3.5.3 3.6.2
         - tox -e style -i https://cosmo-pypi.phys.ethz.ch/simple
     allow_failure: true
+    stage: style
+
 
 docs:
     tags:
@@ -20,6 +28,7 @@ docs:
     script:
         - pyenv local 2.7 3.4.6 3.5.3 3.6.2
         - tox -e docs -i https://cosmo-pypi.phys.ethz.ch/simple
+    stage: test_docs
 
 publish_docs:
     tags:
@@ -28,3 +37,4 @@ publish_docs:
         - pyenv local 2.7 3.4.6 3.5.3 3.6.2
         - tox -e publish_docs -i https://cosmo-pypi.phys.ethz.ch/simple
     when: manual
+    only: master
