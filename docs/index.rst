@@ -22,9 +22,9 @@ Benchmarks
 ----------
 
 All the benchmarks have been made available online as `IPython notebooks
-<http://cosmo-docs.phys.ethz.ch/hope/benchmark.html>`_.
+<http://cosmo-docs.phys.ethz.ch/hope/benchmarks>`_.
 
 Test coverage
 -------------
 
-`Test coverage reports <http://cosmo-docs.phys.ethz.ch/hope/htmlcov.html>`_.
+`Test coverage reports <http://cosmo-docs.phys.ethz.ch/hope/htmlcov>`_.
