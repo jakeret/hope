@@ -2,6 +2,7 @@ stages:
     - style
     - test_code
     - test_docs
+    - publish_docs
 
 tests:
     tags:
@@ -39,3 +40,4 @@ publish_docs:
     when: manual
     only:
         - master
+    stage: publish_docs
