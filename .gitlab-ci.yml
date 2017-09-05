@@ -37,4 +37,5 @@ publish_docs:
         - pyenv local 2.7 3.4.6 3.5.3 3.6.2
         - tox -e publish_docs -i https://cosmo-pypi.phys.ethz.ch/simple
     when: manual
-    only: master
+    only:
+        - master
