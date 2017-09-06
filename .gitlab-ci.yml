@@ -49,3 +49,5 @@ publish_docs:
     stage: publish_docs
     dependencies:
           - docs
+    only:
+        - master
