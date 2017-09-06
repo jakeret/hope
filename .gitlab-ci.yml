@@ -37,8 +37,7 @@ docs:
           - tests
     artifacts:
            paths:
-             - htmlcov/
-             - benchmarks/*.html
+             - docs/_build
 
 publish_docs:
     tags:
@@ -49,5 +48,4 @@ publish_docs:
     when: manual
     stage: publish_docs
     dependencies:
-          - tests
           - docs
