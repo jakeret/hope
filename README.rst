@@ -5,9 +5,6 @@ HOPE - combine the ease of Python and the speed of C++
 .. image:: https://badge.fury.io/py/hope.svg
     :target: http://badge.fury.io/py/hope
 
-.. image:: https://travis-ci.org/cosmo-ethz/hope.svg?branch=master
-        :target: https://travis-ci.org/cosmo-ethz/hope
-        
 .. image:: https://coveralls.io/repos/cosmo-ethz/hope/badge.svg?branch=master
         :target: https://coveralls.io/r/cosmo-ethz/hope?branch=master
 
@@ -16,6 +13,8 @@ HOPE - combine the ease of Python and the speed of C++
 
 .. image:: http://img.shields.io/badge/arXiv-1410.4345-brightgreen.svg?style=flat
         :target: http://arxiv.org/abs/1410.4345
+
+.. image:: https://cosmo-gitlab.phys.ethz.ch/cosmo/hope/badges/master/build.svg
 
 
 **HOPE** is a specialized method-at-a-time JIT compiler written in Python for translating Python source code into C++ and compiles this at runtime. In contrast to other existing JIT compliers, which are designed for general purpose, we have focused our development of the subset of the Python language that is most relevant for astrophysical calculations. By concentrating on this subset, **HOPE** is able to achieve the highest possible performance
