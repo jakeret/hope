@@ -6,10 +6,12 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 from hope.exceptions import UnsupportedCompilerException
 
 CXX_FLAGS = {
-    "clang": ["-Wall", "-Wno-unused-variable", "-march=native", "-stdlib=libc++", "-std=c++11"],
-    "icc": ["-Wall", "-Wno-unused-variable", "-march=native", "-stdlib=libc++", "-std=c++11"],
-    "gcc-mac": ["-Wall", "-Wno-unused-variable", "-std=c++11", "-msse4.2"],
-    "gcc-linux": ["-Wall", "-Wno-unused-variable", "-std=c++11"]
+    "clang": ["-Wall", "-Wno-unused-variable", "-march=native", "-stdlib=libc++", "-std=c++11",
+               "-Wno-unreachable-code"],
+    "icc": ["-Wall", "-Wno-unused-variable", "-march=native", "-stdlib=libc++", "-std=c++11",
+            "-Wno-unreachable-code"],
+    "gcc-mac": ["-Wall", "-Wno-unused-variable", "-std=c++11", "-msse4.2", "-Wno-unreachable-code"],
+    "gcc-linux": ["-Wall", "-Wno-unused-variable", "-std=c++11", "-Wno-unreachable-code"]
 }
 
 DARWIN_KEY = "Darwin"

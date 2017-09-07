@@ -271,8 +271,8 @@ def _compile(target, localfilename, fkt_name):
         try: 
             #trying to encode utf-8 to support AstroPy
             warnings.warn("A warning has been issued during compilation:\n{0}".format(out).encode('utf-8'))
-        except UnicodeError:
-            #encoding fails on Linux
+        except (UnicodeError, TypeError):
+            #encoding fails on Linux and Python 3
             warnings.warn("A warning has been issued during compilation:\n{0}".format(out))
 
     if config.verbose:

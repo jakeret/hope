@@ -10,6 +10,9 @@ import hope, itertools, pytest, sys, sysconfig, os, shutil
 
 from .utilities import random, check, make_test, JENKINS, min_dtypes, dtypes, shapes, setup_module, setup_method, teardown_module
 
+
+np_version = tuple(map(int, np.__version__.split(".")))
+
 #hope.config.keeptemp = True
 
 def test_ufig_sin_cos():
@@ -92,11 +95,13 @@ def test_ufig_bincount():
 
     def fkt_bincount(buffer, x, y, size, size_x, size_y):
         for idx in range(size):
-            if x[idx]>= 0 and x[idx] <= size_x and y[idx] >= 0 and y[idx] <= size_y:
-                buffer[x[idx], y[idx]] += 1.
+            if x[idx] >= 0 and x[idx] <= size_x and y[idx] >= 0 and y[idx] <= size_y:
+                x_bin = np.uint64(x[idx])
+                y_bin = np.uint64(y[idx])
+                buffer[x_bin, y_bin] += 1.
     hope.config.optimize = True
     hbincount = hope.jit(fkt_bincount)
-    
+
     x = np.random.uniform(-1, 6, size=(1000,))
     y = np.random.uniform(-1, 6, size=x.shape)
     buffer, hbuffer = np.zeros((5, 5)), np.zeros((5, 5))

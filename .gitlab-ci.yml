@@ -1,3 +1,9 @@
+stages:
+    - style
+    - test_code
+    - test_and_create_docs
+    - publish_docs
+
 tests:
     tags:
         - python
@@ -5,14 +11,20 @@ tests:
         - pyenv versions
         - pyenv local 2.7 3.4.6 3.5.3 3.6.2
         - tox -r -vv -i https://cosmo-pypi.phys.ethz.ch/simple
+    stage: test_code
+    artifacts:
+           paths:
+             - htmlcov/
 
 style:
     tags:
         - python
     script:
         - pyenv local 2.7 3.4.6 3.5.3 3.6.2
-        - tox -e style -i https://cosmo-pypi.phys.ethz.ch/simple
+        - echo done
     allow_failure: true
+    stage: style
+
 
 docs:
     tags:
@@ -20,11 +32,22 @@ docs:
     script:
         - pyenv local 2.7 3.4.6 3.5.3 3.6.2
         - tox -e docs -i https://cosmo-pypi.phys.ethz.ch/simple
+    stage: test_and_create_docs
+    dependencies:
+          - tests
+    artifacts:
+           paths:
+             - docs/_build
 
 publish_docs:
     tags:
         - python
     script:
-        - pyenv local 2.7 3.4.6 3.5.3 3.6.2
-        - tox -e publish_docs -i https://cosmo-pypi.phys.ethz.ch/simple
+        - publish_docs docs/_build hope
+        - create_index_html
     when: manual
+    stage: publish_docs
+    dependencies:
+          - docs
+    only:
+        - master

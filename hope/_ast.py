@@ -7,6 +7,7 @@ Contains all the HOPE AST nodes currently supported
 from __future__ import print_function, division, absolute_import, unicode_literals
 
 
+import ast
 import copy
 
 from hope._const import *
@@ -390,3 +391,22 @@ class NodeVisitor(object):
 
     def generic_visit(self, node):
         raise Exception("Not Implemented Token: {0}({1!s})".format(type(node).__name__, node))
+
+
+def call_has_kw_args(node):
+    if hasattr(node, "kwargs"):
+        return node.kwargs is not None
+    return any(kw.arg is None for kw in getattr(node, "keywords", []))
+
+
+def call_has_starargs(node):
+    if hasattr(node, "starargs"):
+        return node.starargs is not None
+    try:
+        # must be defined in Python 3
+        ast.Starred
+    except AttributeError:
+        raise RuntimeError("should not happen")
+    return any(isinstance(arg, ast.Starred) for arg in node.args)
+
+
