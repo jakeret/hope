@@ -12,3 +12,4 @@ jupyter; python_version >= '3'
 numba
 numexpr
 version_information
+sphinx-pynpoint-theme
