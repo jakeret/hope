@@ -5,4 +5,7 @@ from __future__ import print_function, division, absolute_import
 # unforeseeable failures when numpy changed its behaviour handling exponentiation of integer
 # types.
 import random
+import numpy as np
+
 random.seed(12345)
+np.random.seed(12345)
