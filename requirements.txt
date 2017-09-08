@@ -8,7 +8,7 @@ pytest-cov>=1.8.0
 sympy>=0.7.5
 matplotlib
 Cython
-jupyter
+jupyter; python_version >= '3'
 numba
 numexpr
 version_information
