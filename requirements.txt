@@ -6,3 +6,9 @@ numpy>=1.9.2
 pytest>=2.6.3
 pytest-cov>=1.8.0
 sympy>=0.7.5
+matplotlib
+Cython
+jupyter
+numba
+numexpr
+version_information
