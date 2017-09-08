@@ -39,7 +39,7 @@ PACKAGE_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
 
 setup(
     name="hope",
-    version="0.6.1",
+    version="0.7.0",
     description="A Python Just-In-Time compiler for astrophysical computations",
     long_description=readme + "\n\n" + history,
     author="Lukas Gamper, Joel Akeret",
