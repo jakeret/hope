@@ -5,18 +5,12 @@ HOPE - combine the ease of Python and the speed of C++
 .. image:: https://badge.fury.io/py/hope.svg
     :target: http://badge.fury.io/py/hope
 
-.. image:: https://travis-ci.org/cosmo-ethz/hope.svg?branch=master
-        :target: https://travis-ci.org/cosmo-ethz/hope
-
-.. image:: https://coveralls.io/repos/cosmo-ethz/hope/badge.svg?branch=master
-        :target: https://coveralls.io/r/cosmo-ethz/hope?branch=master
-
-.. image:: https://img.shields.io/badge/docs-latest-blue.svg?style=flat
-        :target: http://hope.readthedocs.org/en/latest
-
 .. image:: http://img.shields.io/badge/arXiv-1410.4345-brightgreen.svg?style=flat
         :target: http://arxiv.org/abs/1410.4345
 
+.. image:: https://cosmo-gitlab.phys.ethz.ch/cosmo/hope/badges/master/build.svg
+
+.. image:: https://cosmo-gitlab.phys.ethz.ch/cosmo/hope/badges/master/coverage.svg
 
 **HOPE** is a specialized method-at-a-time JIT compiler written in Python for
 translating Python source code into C++ and compiles this at runtime. In
