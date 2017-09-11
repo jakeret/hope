@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -e
 
 function convert
 {
@@ -9,12 +8,14 @@ function convert
 
 pushd benchmarks
 
-rm *.so
-rm src/*.o
+rm -f *.so
+rm -f src/*.o
 rm -rf .hope
 rm -rf hope
 
-convert native_cpp_gen.ipynb 
+set -e
+
+convert native_cpp_gen.ipynb
 convert "HPC Python.ipynb"
 convert fibonacci.ipynb
 convert simplify.ipynb
@@ -22,4 +23,5 @@ convert star.ipynb
 convert julialang.org.ipynb
 convert numexpr.ipynb
 convert pairwise.ipynb
+
 popd
