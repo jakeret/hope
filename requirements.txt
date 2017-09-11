@@ -9,8 +9,11 @@ pytest-cov>=1.8.0
 sympy>=0.7.5
 matplotlib
 Cython
+
+# only needed for createing docs with Python 3
+scipy; python_version >= '3'
 jupyter; python_version >= '3'
-numba
-numexpr
-version_information
-sphinx-pynpoint-theme
+numba; python_version >= '3'
+numexpr; python_version >= '3'
+version_information; python_version >= '3'
+sphinx-pynpoint-theme; python_version >= '3'
