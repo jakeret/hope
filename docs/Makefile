@@ -50,6 +50,11 @@ clean:
 	rm -rf $(BUILDDIR)/*
 
 html:
+	@echo copy html versions of benchark notebooks to $(BUILDDIR)/html/benchmarks
+	mkdir -p $(BUILDDIR)
+	mkdir -p $(BUILDDIR)/html
+	mkdir -p $(BUILDDIR)/html/benchmarks
+	cp ../benchmarks/*.html $(BUILDDIR)/html/benchmarks
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."

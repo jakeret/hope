@@ -8,12 +8,17 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 import numpy as np
 import hope, itertools, pytest, sys, sysconfig, os, shutil
 
-from test.utilities import random, check, make_test, JENKINS, min_dtypes, dtypes, shapes, setup_module, setup_method, teardown_module
+from .utilities import random, check, make_test, JENKINS, min_dtypes, dtypes, shapes, setup_module, setup_method, teardown_module
+
+
+np_version = tuple(map(int, np.__version__.split(".")))
+
 
 @pytest.mark.parametrize("dtype,shape", itertools.product(dtypes, shapes))
 @make_test
-def test_return_arr(a, b, c): 
+def test_return_arr(a, b, c):
     return a
+
 
 @pytest.mark.parametrize("dtype,shape", itertools.product(dtypes, shapes))
 def test_return_arr_expr(dtype, shape):
@@ -22,8 +27,15 @@ def test_return_arr_expr(dtype, shape):
     hfkt = hope.jit(fkt)
     (ao, ah), (co, ch) = random(dtype, shape), random(dtype, shape)
     ao, ah = np.copysign(np.power(np.abs(ao), 1. / 8.), ao).astype(dtype), np.copysign(np.power(np.abs(ah), 1. / 8.), ah).astype(dtype)
-    if np.count_nonzero(ao == 0) > 0: ao[ao == 0] += 1
-    if np.count_nonzero(ah == 0) > 0: ah[ah == 0] += 1
+    if shape:
+        ao[ao == 0] += 1
+        ah[ah == 0] += 1
+    else:
+        ao = 1 if ao == 0 else ao
+        ah = 1 if ah == 0 else ah
+    if np_version >= (1, 12, 0):
+        # numpy 1.12 introduce incompatible change which disallows negative exponents for integers
+        ao = ao.astype(np.float)
     fkt(ao, co),  hfkt(ah, ch)
     assert check(co, ch)
     fkt(ao, co),  hfkt(ah, ch)

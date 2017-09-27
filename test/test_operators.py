@@ -8,7 +8,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 import numpy as np
 import hope, itertools, pytest, sys, sysconfig, os, shutil
 
-from test.utilities import random, check, make_test, JENKINS, min_dtypes, dtypes, shapes, setup_module, setup_method, teardown_module
+from .utilities import random, check, make_test, JENKINS, min_dtypes, dtypes, shapes, setup_module, setup_method, teardown_module
 
 @pytest.mark.parametrize("dtype,shape", itertools.product([dtype for dtype in dtypes if issubclass(dtype, np.integer) or dtype == int], shapes[1:]))
 def test_binary_mod(dtype, shape):
@@ -18,8 +18,8 @@ def test_binary_mod(dtype, shape):
         c[:] = a % b
     hfkt = hope.jit(fkt)
     (ao, ah), (bo, bh), (co, ch) = random(dtype, shape), random(dtype, shape), random(dtype, shape)
-    if np.count_nonzero(bo == 0) > 0: bo[bo == 0] += 1
-    if np.count_nonzero(bh == 0) > 0: bh[bh == 0] += 1
+    bo[bo == 0] += 1
+    bh[bh == 0] += 1
     fkt(ao, bo, co),  hfkt(ah, bh, ch)
     assert check(co, ch)
     fkt(ao, bo, co),  hfkt(ah, bh, ch)
@@ -55,8 +55,8 @@ def test_augmented_mod(dtype, shape):
         c[:] %= a
     hfkt = hope.jit(fkt)
     (ao, ah), (co, ch) = random(dtype, shape), random(dtype, shape)
-    if np.count_nonzero(ao == 0) > 0: ao[ao == 0] += 1
-    if np.count_nonzero(ah == 0) > 0: ah[ah == 0] += 1
+    ao[ao == 0] += 1
+    ah[ah == 0] += 1
     fkt(ao, co),  hfkt(ah, ch)
     assert check(co, ch)
     fkt(ao, co),  hfkt(ah, ch)

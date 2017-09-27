@@ -179,6 +179,8 @@ class IterableFunctionVisitor(ast.NodeVisitor):
         return True
     def visit_Name(self, node):
         return True
+    def visit_NameConstant(self, node):
+        return True
     def visit_Slice(self, node):
         return node.lower if node.lower is None else self.visit(node.lower) and node.upper if node.upper is None else self.visit(node.upper)
     def visit_ExtSlice(self, node):
@@ -428,7 +430,7 @@ class ASTTransformer(ast.NodeVisitor):
             raise Exception("The variable '{0}' does already exists, since the scopeing is different in c++ and python, this is not supported".format(iter.name))
         # TODO: implement this more generic
         if isinstance(node.iter, ast.Call) and isinstance(node.iter.func, ast.Name) and node.iter.func.id in ["range", "xrange"] \
-                and len(node.iter.keywords) == 0 and node.iter.starargs is None and node.iter.kwargs is None:
+                and not call_has_kw_args(node.iter):
             if len(node.iter.args) == 1:
                 args = [Number(0), self.visit(node.iter.args[0])]
             elif len(node.iter.args) == 2:
@@ -575,7 +577,10 @@ class ASTTransformer(ast.NodeVisitor):
             return self.variables[name]
             
         elif isinstance(node.func, ast.Attribute):
-            if not node.starargs is None or not node.kwargs is None:
+
+            if call_has_starargs(node):
+                raise UnsupportedFeatureException("Only arguments without default values are supported in calls")
+            if call_has_kw_args(node):
                 raise UnsupportedFeatureException("Only arguments without default values are supported in calls")
             
             return Call(self.visit(node.func), 

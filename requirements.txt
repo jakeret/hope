@@ -1,3 +1,4 @@
+--extra-index-url https://cosmo-pypi.phys.ethz.ch/simple/
 Sphinx>=1.2.3
 coverage>=3.7.1
 flake8>=2.2.4
@@ -6,4 +7,13 @@ numpy>=1.9.2
 pytest>=2.6.3
 pytest-cov>=1.8.0
 sympy>=0.7.5
-tox==1.8.0
+matplotlib
+Cython
+
+# only needed for createing docs with Python 3
+scipy; python_version >= '3'
+jupyter; python_version >= '3'
+numba; python_version >= '3'
+numexpr; python_version >= '3'
+version_information; python_version >= '3'
+sphinx-pynpoint-theme; python_version >= '3'

@@ -20,6 +20,7 @@ We would like to thank several people for helping to test this package before re
 * Chihway Chang
 * Sebastian Gaebel 
 * Joerg Herbel 
+* Uwe Schmitt
 
 
 Citations

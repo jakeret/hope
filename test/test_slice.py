@@ -8,7 +8,7 @@ from __future__ import print_function, division, absolute_import, unicode_litera
 import hope
 import itertools, pytest
 
-from test.utilities import random, check, make_test, dtypes, shapes, setup_module, setup_method, teardown_module
+from .utilities import random, check, make_test, dtypes, shapes, setup_module, setup_method, teardown_module
 
 @pytest.mark.parametrize("dtype", dtypes)
 def test_assignment(dtype):
