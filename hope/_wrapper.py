@@ -1,6 +1,6 @@
 # Copyright (c) 2013 ETH Zurich, Institute of Astronomy, Lukas Gamper <lukas.gamper@usystems.ch>
 
-# setuptools have a proplem with the unicode_literals in python 2, so skip unicode_literals
+# setuptools have a problem with the unicode_literals in python 2, so skip unicode_literals
 from __future__ import print_function, division, absolute_import
 
 

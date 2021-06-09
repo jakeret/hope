@@ -21,7 +21,7 @@ from hope._wrapper import get_fkt_hash
 # TODO: implement self, self.cost, self.fkt
 # TODO: replace function in global namespace by c pointer to get the native speed on the first run
 # TODO: make two versions for np.int_ and int
-# TODO: make hope.interp with retuns a callable object with 2^n basepoints and c pendant
+# TODO: make hope.interp with returns a callable object with 2^n basepoints and c pendant
 # TODO: if dtype of argument is alreadu correct, do not cast it in c code
 # TODO: add test for subscrpto with all types to get the same semantics
 # TODO: controll structures
@@ -33,10 +33,10 @@ from hope._wrapper import get_fkt_hash
 # TODO: use https://github.com/workhorsy/py-cpuinfo/blob/master/cpuinfo.py to detect features
 # TODO: other code generator: http://documen.tician.de/codepy/jit.html#module-codepy.jit
 # TODO: make ufunc decorator http://docs.scipy.org/doc/numpy/reference/ufuncs.html like numba http://numba.pydata.org/numba-doc/0.12.1/ufuncs.html
-# TODO: optimize pow with interger powers to multipications
+# TODO: optimize pow with interger powers to multiplications
 # TODO: make tests for _dump
 # TODO: add constants/class constants to hope
-# TODO: use sympy to simpify and Common Subexpression Detection
+# TODO: use sympy to simplify and Common Subexpression Detection
 # 		http://docs.sympy.org/latest/modules/rewriting.html
 # 		http://docs.sympy.org/latest/modules/core.html#module-sympy.core.sympify
 

@@ -672,7 +672,7 @@ def _run_fkt_code(modtoken):
     code += "\t\tPyObject * signatures = Py_BuildValue(\"(sO)\", \"{0}\", args);\n".format(pickled)
     code += "\t\tif (!signatures) {\n"
 
-    # TODO: make all exceptions reasonamble: http://docs.python.org/2/c-api/exceptions.html
+    # TODO: make all exceptions reasonable: http://docs.python.org/2/c-api/exceptions.html
     code += "\t\t\tPyErr_SetString(PyExc_ValueError, \"Error building signature string for {0}\");\n".format(modtoken.main)
     code += "\t\t\treturn NULL;\n"
     code += "\t\t}\n"
