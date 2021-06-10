@@ -40,7 +40,7 @@ Check if indeces are out of bounds
 hopeless = False
 """ 
 Disable hope. If hope.config.hopeless is True, hope.jit return the original function.
-Use this function for debug purpos
+Use this function for debug purpose
 """
 
 # make readable cpp file, but typecasting is not exactly the same as in numpy - this flag is private

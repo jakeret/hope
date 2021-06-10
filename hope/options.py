@@ -28,7 +28,7 @@ def enableUnsaveMath():
     Enable the fast-math and associative-math flags in the c++ compiler.
 
     .. warning::
-        using these flags, ``nan`` and ``inf`` are not propageted properly.
+        using these flags, ``nan`` and ``inf`` are not propagated properly.
         Only use these flags if you know what you are doing!
     """
     config.cxxflags += ["-fassociative-math", "-ffast-math"]

@@ -752,7 +752,7 @@ class ASTTransformer(ast.NodeVisitor):
 def get_fkt_ast(fkt):
     """
     Creates a AST form the given function by getting the source of the function 
-    by inspection, removing unneccesary indentations and passing the string 
+    by inspection, removing unnecessary indentations and passing the string 
     representation to the :py:mod:`ast` module. 
     
     :param fkt: Function object to be used
